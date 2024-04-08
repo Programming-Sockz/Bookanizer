@@ -1,4 +1,5 @@
 ﻿using Bookanizer.Server.Interfaces;
+using Bookanizer.Server.Model;
 using Bookanizer.Server.Services;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -19,9 +20,22 @@ namespace Bookanizer.Server.Controller
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetPersons()
+        public async Task<ActionResult<List<Test>>> GetTest()
         {
-            return Ok("yippeee");
+            var tests = context.Test.ToList();
+            return Ok(tests);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateTest(string name)
+        {
+            Test test = new Test();
+            test.FirstName = name;
+            test.LastName  = name;
+            test.YIppe = 2;
+            context.Test.Add(test);
+            await context.SaveChangesAsync();
+            return Ok();
         }
     }
 }

@@ -58,4 +58,7 @@
     <Folder Include="Properties" />
     <Folder Include="Tables\" />
   </ItemGroup>
+  <ItemGroup>
+    <Build Include="Tables\Test.sql" />
+  </ItemGroup>
 </Project>

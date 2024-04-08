@@ -1,4 +1,5 @@
 ﻿using Bookanizer.Server.Interfaces;
+using Bookanizer.Server.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bookanizer.Server.Services
@@ -7,6 +8,7 @@ namespace Bookanizer.Server.Services
     {
         protected string Schema = "dbo";
 
+        public DbSet<Test> Test { get; set; }
 
         public BookanizerDbContext(DbContextOptions<BookanizerDbContext> options) : base(options)
         {
