@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34714.143
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bookanizer.Server", "Server\Bookanizer.Server.csproj", "{CD18575D-508A-44EF-A6AB-DD03B6FF84CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bookanizer.Server", "Server\Bookanizer.Server.csproj", "{CD18575D-508A-44EF-A6AB-DD03B6FF84CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bookanizer.Client", "Client\Bookanizer.Client.csproj", "{C73EF124-5BF6-4187-AE8B-41FCA5D089FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bookanizer.Client", "Client\Bookanizer.Client.csproj", "{C73EF124-5BF6-4187-AE8B-41FCA5D089FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bookanizer.Shared", "Shared\Bookanizer.Shared.csproj", "{00F86B03-0C57-4CF4-9A69-048D4655D882}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bookanizer.Shared", "Shared\Bookanizer.Shared.csproj", "{00F86B03-0C57-4CF4-9A69-048D4655D882}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database", "Database\Database.sqlproj", "{48C5AB85-EB73-46BF-A879-E5497E00F46A}"
 EndProject

@@ -10,6 +10,13 @@ namespace Bookanizer.Server.Services
 
         public DbSet<Test> Test { get; set; }
 
+        //Sachen die beachtet werden müssen:
+        //Das Model muss in diese klammer rein <>
+        //Der Name muss der gleiche name der SQL Tabelle sein
+        //dieses {get;set;} sieht man immer mal wieder und können für dieses program ignoriert werden, die benutzt man soweit ich weiß nur um methoden auszuführen wenn man die variable aufruft oder abändernt.
+        //Wenn man hier ein DbSet einträgt auch im Interface IBookanizerDbContext angeben
+        public DbSet<Book> Books { get; set; }
+
         public BookanizerDbContext(DbContextOptions<BookanizerDbContext> options) : base(options)
         {
         }

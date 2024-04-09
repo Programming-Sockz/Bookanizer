@@ -10,19 +10,19 @@ namespace Bookanizer.Server.Controller
     [ApiController]
     public class TestController : ControllerBase
     {
-        private readonly BookanizerDbContext context;
-        private readonly IMapper mapper;
+        private readonly BookanizerDbContext _context;
+        private readonly IMapper _mapper;
 
         public TestController(BookanizerDbContext context, IMapper mapper)
         {
-            this.context = context;
-            this.mapper = mapper;
+            _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<Test>>> GetTest()
         {
-            var tests = context.Test.ToList();
+            var tests = _context.Test.ToList();
             return Ok(tests);
         }
 
@@ -33,8 +33,8 @@ namespace Bookanizer.Server.Controller
             test.FirstName = name;
             test.LastName  = name;
             test.YIppe = 2;
-            context.Test.Add(test);
-            await context.SaveChangesAsync();
+            _context.Test.Add(test);
+            await _context.SaveChangesAsync();
             return Ok();
         }
     }

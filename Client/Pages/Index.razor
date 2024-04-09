@@ -1,6 +1,46 @@
 ﻿@page "/"
 
+<!--Diese .razor file ist was die Endnutzer dann tatsächlich sehen.-->
+@* Hier kann man einfach im normalen HTML code schreiben. Inklusive kann man auf sachen wie Javascript aufrufen. (Diese müssten aber im Index.html unter dem wwwroot ordner geschrieben werden) *@
 <h1>test!</h1>
+<p>Hello World!</p>
 
+<br />
+
+@* um C# code zu verwenden wie ein if wird ein @ benutzt *@
+@if (true)
+{
+    @* um auf eine C# Variable zu verweisen muss ein @ und dann der Variablen name benutzt werden *@
+    <p>@HelloWorld</p>
+}
+
+<br />
+
+@* ein button (oder irgendein html element kann man einen @onclick event geben der C# code ausführt beim click *@
+<button @onclick="ClickEvent">Click me!</button>
+
+<br />
+
+@if(showHidden)
+{
+    <p>Hello World!</p>
+}
+
+<br />
+
+<a href="apiexamples">Beispiele für API-Calls</a>
+
+@* Hier ist unser C# code für diese .razor file *@
 @code {
+    private string HelloWorld = "Hello World!";
+    private bool showHidden = false;
+
+    private void ClickEvent()
+    {
+        //hier invertiert einfach nur den momentan zustand eines bool
+        showHidden = !showHidden;
+
+        //Das StateHasChanged() wird nicht immer benötigt aber sagt einfach nur der .razor das sich was geändert hat und evtl sachen neuladen muss
+        StateHasChanged();
+    }
 }

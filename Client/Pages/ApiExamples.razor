@@ -1,0 +1,51 @@
+﻿@page "/apiexamples"
+@using Bookanizer.Shared.DTO
+@using Bookanizer.Shared.Libraries
+@* dieses @page gibt die URL für die seite an  *@
+
+ @*                        .Any return ein true wenn eine Liste mindestens ein element hat*@
+@if (books != null && books.Any())
+{
+    @foreach(var book in books)
+    {
+        <p> @book.Title released am @book.ReleaseDate </p>
+    }
+}
+
+@code {
+    //Initialisierung für unser HttpClient das wir benutzen um unsere API anzureden
+    [Inject] public HttpClient Http { get; set; }
+
+    private List<BookDTO> books = new();
+
+    //das hier ist eine methode die beim pageload ausgeführt wird
+    //hier sind mehr informaionen dazu https://learn.microsoft.com/de-de/aspnet/core/blazor/components/lifecycle?view=aspnetcore-8.0
+    protected override async Task OnInitializedAsync()
+    {
+        await GetBooks();
+    }
+
+    private async Task GetBooks()
+    {
+        //                 GetFromJsonAsync sagt das die JSON die wir vom Http zurück bekommen direkt als ein bestimmten Datentyp ausgelesen werden soll
+        //                                 hier <> wird gesagt als was es ausgelesen werden soll in diesen fall eine Liste von BookDTO
+        //                                                 Clickt hier (mit f12) rein für mehr info
+        books = await Http.GetFromJsonAsync<List<BookDTO>>(ApiRoutes.Books.GET());
+    }
+
+    private async Task PostBook(BookDTO bookDTO)
+    {
+        //         Wir posten das als JSON
+        //                         Route an wo es verschickt werden soll
+        //                                                 das DTO was verschickt werden soll
+        await Http.PostAsJsonAsync(ApiRoutes.Books.POST(), bookDTO);
+    }
+
+    private async Task PutBook(BookDTO bookDTO)
+    {
+        //         Wir benutzen put als JSON
+        //                         Route an wo es verschickt werden mit der ID als parameter um die Route korrekt zu generieren
+        //                                                 das DTO was verschickt werden soll
+        await Http.PutAsJsonAsync(ApiRoutes.Books.PUT(bookDTO.Id), bookDTO);
+    }
+}
