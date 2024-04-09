@@ -29,4 +29,14 @@ wenn man alle vorhandene einträge löschen will kann man das hier klicken
 
 <img width="560" alt="image" src="https://github.com/Programming-Sockz/Bookanizer/assets/164316413/de4d0857-b4a3-45f0-b593-c8ebfcb9a144">
 
+<br>
+<br>
+
+um das program zu starten
+<br>
+<img width="210" alt="image" src="https://github.com/Programming-Sockz/Bookanizer/assets/164316413/ca27df2f-dbb9-459a-8180-f83b37f1ec2d">
+<br>
+den Server und client als Start setzen
+<br>
+<img width="584" alt="image" src="https://github.com/Programming-Sockz/Bookanizer/assets/164316413/137df479-1b95-4c1e-90a2-08e17ed67f59">
 
