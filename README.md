@@ -6,6 +6,14 @@ so logt man sich da ein:
 <img width="371" alt="image" src="https://github.com/Programming-Sockz/Bookanizer/assets/164316413/b0578d14-5ecf-41f5-9d18-74ec0b23632d">
 <br>
 hier für copy paste: (localdb)\mssqllocaldb
+<br>
+dann eine Neue Datenbank erstellen
+<img width="310" alt="image" src="https://github.com/Programming-Sockz/Bookanizer/assets/164316413/5b373f71-206b-49f7-894e-b84134e94529">
+<br>
+hier einfach nur den Namen zu Bookanizer ändern
+<br>
+<img width="522" alt="image" src="https://github.com/Programming-Sockz/Bookanizer/assets/164316413/b2a5d68e-ba6a-4be6-b2aa-306d1fb1a533">
+
 
 
 
