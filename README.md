@@ -1,13 +1,20 @@
 Ihr braucht blazor mit .net8
 
 ihr braucht Microsoft sql server management studio: https://learn.microsoft.com/de-de/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver16
+<br>
 so logt man sich da ein:
+<br>
 <br>
 <img width="371" alt="image" src="https://github.com/Programming-Sockz/Bookanizer/assets/164316413/b0578d14-5ecf-41f5-9d18-74ec0b23632d">
 <br>
+<br>
+<br>
 hier für copy paste: (localdb)\mssqllocaldb
 <br>
+<br>
+<br>
 dann eine Neue Datenbank erstellen
+<br>
 <img width="310" alt="image" src="https://github.com/Programming-Sockz/Bookanizer/assets/164316413/5b373f71-206b-49f7-894e-b84134e94529">
 <br>
 hier einfach nur den Namen zu Bookanizer ändern
@@ -15,11 +22,12 @@ hier einfach nur den Namen zu Bookanizer ändern
 <img width="522" alt="image" src="https://github.com/Programming-Sockz/Bookanizer/assets/164316413/b2a5d68e-ba6a-4be6-b2aa-306d1fb1a533">
 
 
+<br>
+<br>
 
+wenn ihr die Datenbank publischen wollt.  
 
-
-wenn ihr die Datenbank publischen wollt.
-
+<br>
 rechtsclick auf das Datenbank projekt
 <br>
 
