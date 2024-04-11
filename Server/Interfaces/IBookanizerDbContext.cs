@@ -9,7 +9,7 @@ namespace Bookanizer.Server.Interfaces
     {
         public DbSet<Test> Test { get; set; }
 
-       public DbSet<Book> Books { get; set; }
+        public DbSet<Book> Books { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }

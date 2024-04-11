@@ -55,7 +55,7 @@ namespace Bookanizer.Server.Controller
         {
             //Hier wird LinQ benutzt um nach den Namen zu sortieren
             //aka unsere Where abfrage
-            var books = _context.Books.Where(x => x.Title == bookTitle).ToList();
+            var books = _context.Books.Where(x => x.Title.Contains(bookTitle)).ToList();
             if (books == null)
             {
                 return NotFound();
@@ -90,7 +90,7 @@ namespace Bookanizer.Server.Controller
             }
 
             //fügt es dem Context hinzu
-            _context.Add(_mapper.Map<Book>(bookDTO));
+            _context.Books.Add(_mapper.Map<Book>(bookDTO));
 
             //speichert diese ab
             await _context.SaveChangesAsync();
