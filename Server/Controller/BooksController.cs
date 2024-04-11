@@ -100,8 +100,7 @@ namespace Bookanizer.Server.Controller
         }
 
         [HttpPut("{bookId}")]
-        //[FromHeader] gibt hier an das die bookId im Header steht
-        public async Task<IActionResult> Put([FromHeader] Guid bookId, [FromBody] BookDTO bookDTO)
+        public async Task<IActionResult> Put(Guid bookId, [FromBody] BookDTO bookDTO)
         {
             //wir brauchen zuerst unser momentan gespeichertes buch was wir überschreiben wollen
             var dbBook = await _context.Books.FindAsync(bookId);

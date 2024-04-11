@@ -1,22 +1,42 @@
 ﻿@page "/apiexamples"
+@* dieses @page gibt die URL für die seite an  *@
 @using Bookanizer.Shared.DTO
 @using Bookanizer.Shared.Libraries
-@* dieses @page gibt die URL für die seite an  *@
 
- @*                        .Any return ein true wenn eine Liste mindestens ein element hat*@
+@*                         .Any return ein true wenn eine Liste mindestens ein element hat*@
 @if (books != null && books.Any())
 {
-    @foreach(var book in books)
-    {
-        <p> @book.Title released am @book.ReleaseDate </p>
-    }
+    <ul>
+        @foreach(var book in books)
+        {
+            <li style="cursor:pointer" @onclick="() => StartEdit(book)"> @book.Title released am @book.ReleaseDate </li>
+        }
+    </ul>
 }
+
+<h1>
+    Buch @(editBook.Id == Guid.Empty ? "erstellen" : "bearbeiten" )
+</h1>
+<Microsoft.AspNetCore.Components.Forms.EditForm OnValidSubmit="()=>Submit()" Model="editBook">
+    <label for="title">Buchtitel</label>
+    <input type="text" id="Title" title="Title" @bind-value="editBook.Title" />
+    <br />
+    <label for="release-date">Releasedatum</label>
+    <input type="date" id="release-date" title="Releasedatum" @bind-value="editBook.ReleaseDate" />
+    <br />
+    <label for="page-count">Seitenzahl</label>
+    <input type="number" id="page-count" title="Seitenzahl" @bind-value="editBook.PageCount" />
+    <br />
+    <button type="submit">@(editBook.Id == Guid.Empty ? "Erstellen" : "Bearbeiten")</button>
+</Microsoft.AspNetCore.Components.Forms.EditForm>
 
 @code {
     //Initialisierung für unser HttpClient das wir benutzen um unsere API anzureden
     [Inject] public HttpClient Http { get; set; }
 
     private List<BookDTO> books = new();
+
+    private BookDTO editBook = new();
 
     //das hier ist eine methode die beim pageload ausgeführt wird
     //hier sind mehr informaionen dazu https://learn.microsoft.com/de-de/aspnet/core/blazor/components/lifecycle?view=aspnetcore-8.0
@@ -46,6 +66,26 @@
         //         Wir benutzen put als JSON
         //                         Route an wo es verschickt werden mit der ID als parameter um die Route korrekt zu generieren
         //                                                 das DTO was verschickt werden soll
-        await Http.PutAsJsonAsync(ApiRoutes.Books.PUT(bookDTO.Id), bookDTO);
+         await Http.PutAsJsonAsync(ApiRoutes.Books.PUT(bookDTO.Id), bookDTO);
+    }
+
+    private async Task Submit()
+    {
+        if(editBook.Id == Guid.Empty)
+        {
+            await PostBook(editBook);
+        }
+        else
+        {
+            await PutBook(editBook);
+        }
+        editBook = new();
+        await GetBooks();
+        StateHasChanged();
+    }
+
+    private void StartEdit(BookDTO book)
+    {
+        editBook = book;
     }
 }
