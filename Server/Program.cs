@@ -24,6 +24,8 @@ builder.Services.AddScoped<IMapper, Mapper>();
 
 var app = builder.Build();
 
+app.UseCors();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
