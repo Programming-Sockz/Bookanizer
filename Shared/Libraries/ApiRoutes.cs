@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Bookanizer.Shared.Libraries
+﻿namespace Bookanizer.Shared.Libraries
 {
     //hier stehen alle API Routen sortiert drinnen die wir benutzen. Das wird nicht gebracuht aber sammelt alle Routen einfach für den Überblick
     public static class ApiRoutes
@@ -17,7 +11,7 @@ namespace Bookanizer.Shared.Libraries
             public static string GET()
                 => $"{_base}";
             public static string GET_ByName(string name)
-                => $"{_base}/{name}";
+                => $"{_base}/name/{name}";
             public static string GET_ById(Guid id)
                 => $"{_base}/{id}";
             public static string POST()

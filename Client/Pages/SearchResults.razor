@@ -1,0 +1,28 @@
+﻿@page "/search/{searchText}"
+@using Bookanizer.Shared.DTO
+@using Bookanizer.Shared.Libraries
+@if (books != null && books.Any())
+{
+    <ul>
+        @foreach (var book in books)
+        {
+            <li style="cursor:pointer">@book.Title released am @book.ReleaseDate </li>
+        }
+    </ul>
+}
+@code {
+    [Parameter] public string searchText { get; set; }
+    [Inject] public HttpClient Http { get; set; }
+
+    private List<BookDTO> books = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await GetBooks();
+    }
+
+    private async Task GetBooks()
+    {
+        books = await Http.GetFromJsonAsync<List<BookDTO>>(ApiRoutes.Books.GET_ByName(searchText));
+    }
+}

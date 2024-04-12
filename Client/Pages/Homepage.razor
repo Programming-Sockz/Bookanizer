@@ -1,0 +1,32 @@
+﻿@page "/"
+<button style="position:absolute; height:30px;width:50px;top:0;left:0;" @onclick="ShowMenu">menu</button>
+<div style="position:absolute; top:30px;left:0;width:200px;border:solid 2px black; padding:10px" hidden="@showMenu">
+    <a href="index">Index seite (razor beispiele)</a>
+    <a href="apiexamples">Api-Examples</a>
+</div>
+<div style="text-align:center!important">
+    <div style="width:400px;height:400px;border:solid 1px black;margin-top:50px;margin-bottom:50px;margin-left: calc(50% - 200px);">
+        <p style="margin-top:50%">Your Logo could be here</p>
+    </div>
+    <div class="">
+        <input style="width:200px" placeholder="Suchen..." @bind-value="searchText" />
+        <button @onclick="StartSearch">Suchen</button>
+    </div>
+</div>
+
+@code {
+    [Inject] public NavigationManager Navigation { get; set; }
+    private string searchText = "";
+    private bool showMenu = true;
+
+    private async Task StartSearch()
+    {
+        Navigation.NavigateTo("/search/" + searchText);
+    }
+
+    private void ShowMenu()
+    {
+        showMenu = !showMenu;
+        StateHasChanged();
+    }
+}
