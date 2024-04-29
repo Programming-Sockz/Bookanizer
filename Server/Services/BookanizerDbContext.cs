@@ -16,6 +16,8 @@ namespace Bookanizer.Server.Services
         //dieses {get;set;} sieht man immer mal wieder und können für dieses program ignoriert werden, die benutzt man soweit ich weiß nur um methoden auszuführen wenn man die variable aufruft oder abändernt.
         //Wenn man hier ein DbSet einträgt auch im Interface IBookanizerDbContext angeben
         public DbSet<Book> Books { get; set; }
+        public DbSet<User> User { get; set; }
+
 
         public BookanizerDbContext(DbContextOptions<BookanizerDbContext> options) : base(options)
         {
