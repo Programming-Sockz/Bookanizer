@@ -30,3 +30,25 @@ h1:focus {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+.Login-box {
+    height: 40%;
+    width:40%;
+    position:absolute;
+    top: 30%;
+    left:30%;
+    background-color:lightgray;
+    border-radius:40px;
+}
+
+.Login-input {
+    height:25px!important;
+}
+
+.Login-box.form-floating {
+    padding: 0 10px;
+}
+
+.validation-message {
+    color:red;
+}

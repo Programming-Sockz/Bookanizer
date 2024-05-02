@@ -1,3 +1,5 @@
+using Blazored.LocalStorage;
+using Blazored.Modal;
 using Bookanizer.Client;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -10,5 +12,7 @@ builder.Services.AddScoped(sp => new HttpClient
 {
     BaseAddress = new Uri(builder.Configuration["ApiClient:BaseAddress"])
 });
+builder.Services.AddBlazoredModal();
+builder.Services.AddBlazoredLocalStorage();
 
 await builder.Build().RunAsync();

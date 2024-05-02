@@ -1,0 +1,30 @@
+﻿@page "/login"
+@using Blazored.LocalStorage
+@using Bookanizer.Shared.DTO
+@using Bookanizer.Shared.Libraries
+@using Microsoft.AspNetCore.Components.Forms
+<div class="Login-box align-items-center text-center">
+    <EditForm Model="login" OnValidSubmit="ValidSubmit">
+        <DataAnnotationsValidator />
+        <br />
+        <h3 class="text-center">Login</h3>
+        <br />
+        <div class="form-floating">
+            <input type="email" class="form-control Login-input" id="floatingInput" @bind-value="login.Email" placeholder="name@example.com">
+            <label for="floatingInput">Email address</label>
+        </div>
+        <ValidationMessage For="()=>login.Email"></ValidationMessage>
+        <br />
+        <div class="form-floating">
+            <input type="password" class="form-control Login-input" id="floatingPassword" @bind-value="login.Password" placeholder="Password">
+            <label for="floatingPassword">Password</label>
+        </div>
+        <ValidationMessage For="()=>login.Password"></ValidationMessage>
+        <br />
+        @if (responseDTO != null && !responseDTO.Success)
+        {
+            <p class="validation-message">@responseDTO.ErrorMessage</p>
+        }
+        <button type="submit" disabled="@isSubmitting">Login</button>
+    </EditForm>
+</div>

@@ -1,8 +1,22 @@
 ﻿@page "/"
+@using Blazored.LocalStorage
+@using Bookanizer.Shared.DTO
+@using Bookanizer.Shared.Libraries
 <button style="position:absolute; height:30px;width:50px;top:0;left:0;" @onclick="ShowMenu">menu</button>
 <div style="position:absolute; top:30px;left:0;width:200px;border:solid 2px black; padding:10px" hidden="@showMenu">
     <a href="index">Index seite (razor beispiele)</a>
     <a href="apiexamples">Api-Examples</a>
+    <hr />
+    @if(loggedInUser.Id != Guid.Empty)
+    {
+        <p>Logged in as: @loggedInUser.UserName</p>
+        <a @onclick="LogOut">Logout</a>
+    }
+    else
+    {
+        <a href="login">Login</a>
+        <a href="register">Register</a>
+    }
 </div>
 <div style="text-align:center!important">
     <div style="width:400px;height:400px;border:solid 1px black;margin-top:50px;margin-bottom:50px;margin-left: calc(50% - 200px);">
@@ -15,10 +29,23 @@
 </div>
 
 @code {
+    [Inject] public HttpClient Http { get; set; }
     [Inject] public NavigationManager Navigation { get; set; }
+    [Inject] public ILocalStorageService LocalStorageService { get; set; }
+    private string loginStorageKey = "loginStamp";
     private string searchText = "";
     private bool showMenu = true;
+    private UserDTO loggedInUser = new();
 
+    protected override async Task OnInitializedAsync()
+    {
+        var loggedInUser = await LocalStorageService.GetItemAsync<LoginResponseDTO>(loginStorageKey);
+        if(loggedInUser != null && loggedInUser.LoginStamp != Guid.Empty)
+        {
+            this.loggedInUser = await Http.GetFromJsonAsync<UserDTO>(ApiRoutes.User.GET_UserById(loggedInUser.UserId.Value));
+        }
+    }
+    
     private async Task StartSearch()
     {
         Navigation.NavigateTo("/search/" + searchText);
@@ -28,5 +55,11 @@
     {
         showMenu = !showMenu;
         StateHasChanged();
+    }
+
+    private async Task LogOut()
+    {
+        await LocalStorageService.RemoveItemAsync(loginStorageKey);
+        Navigation.Refresh();
     }
 }

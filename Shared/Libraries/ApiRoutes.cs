@@ -19,5 +19,23 @@
             public static string PUT(Guid id)
                 => $"{_base}/{id}";
         }
+
+        public static class User
+        {
+            const string _base = "/api/User";
+
+            public static string GET_Users()
+                => $"{_base}/users";
+            public static string GET_UserById(Guid id)
+                => $"{_base}/user/{id}";
+            public static string POST_Register()
+                => $"{_base}/register";
+            public static string POST_Login()
+                => $"{_base}/login";
+            public static string PUT_DeactivateUser(Guid id)
+                => $"{_base}/deactivate/{id}";
+            public static string PUT_ActivateUser(Guid id)
+                => $"{_base}/activate/{id}";
+        }
     }
 }
