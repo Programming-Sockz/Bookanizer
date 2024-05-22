@@ -62,6 +62,7 @@
     <Build Include="Tables\Test.sql" />
     <Build Include="Tables\Books.sql" />
     <Build Include="Tables\User.sql" />
+    <Build Include="Tables\Author.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database_Dev.publish.xml" />

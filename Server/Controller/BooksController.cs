@@ -4,6 +4,7 @@ using Bookanizer.Shared.DTO;
 using Mapster;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using static Bookanizer.Shared.Libraries.ApiRoutes;
 
 namespace Bookanizer.Server.Controller
@@ -117,6 +118,19 @@ namespace Bookanizer.Server.Controller
             await _context.SaveChangesAsync();
 
             return Ok();
+        }
+
+        [HttpGet("withauthor")]
+        public async Task<List<BookDTO>> GetAllWithAuthor()
+        {
+            return _mapper.Map<List<BookDTO>>(_context.Books
+                .Include(x => x.Author).ToList());
+        }
+
+        [HttpGet("withauthor/{id}")]
+        public async Task<List<BookDTO>> GetWithAuthor(Guid id)
+        {
+            return new();
         }
     }
 }

@@ -7,5 +7,6 @@ CREATE TABLE [Books]
     [ReleaseDate] DATETIME2 NOT NULL, 
     [AuthorId] UNIQUEIDENTIFIER NULL, 
     [SeriesId] UNIQUEIDENTIFIER NULL, 
-    [PageCount] INT NOT NULL
+    [PageCount] INT NOT NULL, 
+    CONSTRAINT [FK_AuthorId_Author] FOREIGN KEY ([AuthorId]) REFERENCES [Author]([Id]) ON DELETE SET NULL
 );

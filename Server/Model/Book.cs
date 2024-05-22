@@ -15,5 +15,9 @@ namespace Bookanizer.Server.Model
         //ein ? nach dem Datentyp heißt das es null sein kann
         public Guid? AuthorId { get; set; }
         public Guid? SeriesId { get; set; }
+
+
+        //das hier wird nicht in der datenbank gespeichert sondern ist der author den wir mit dem foreign key gleichzeitig laden können
+        public Author? Author { get; set; }
     }
 }

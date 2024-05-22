@@ -17,6 +17,7 @@ namespace Bookanizer.Server.Services
         //Wenn man hier ein DbSet einträgt auch im Interface IBookanizerDbContext angeben
         public DbSet<Book> Books { get; set; }
         public DbSet<User> User { get; set; }
+        public DbSet<Author> Author { get; set; }
 
 
         public BookanizerDbContext(DbContextOptions<BookanizerDbContext> options) : base(options)
@@ -26,6 +27,14 @@ namespace Bookanizer.Server.Services
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //das hier erstellt für unser programm die relation unserer SQL zusammen
+            //im Book.sql haben wir den foreign key erstellt und hier bauen wir ihn auch auf.
+            modelBuilder.Entity<Book>()
+                .HasOne(b => b.Author)                // Each Book has one Author
+                .WithMany()                           // An Author can have many Books
+                .HasForeignKey(b => b.AuthorId);     // Foreign key is AuthorId in Book
+
+
             if (!string.IsNullOrWhiteSpace(Schema))
             {
                 modelBuilder.HasDefaultSchema(Schema);

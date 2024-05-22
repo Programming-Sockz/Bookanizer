@@ -16,5 +16,8 @@ namespace Bookanizer.Shared.DTO
         //ein ? nach dem Datentyp heißt das es null sein kann
         public Guid? AuthorId { get; set; }
         public Guid? SeriesId { get; set; }
+
+
+        public AuthorDTO? Author { get; set; }
     }
 }
