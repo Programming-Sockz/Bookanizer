@@ -90,8 +90,6 @@ namespace Bookanizer.Server.Controller
                 return BadRequest();
             }
 
-            var goFuckYourself = _mapper.Map<Book>(bookDTO);
-
             //fügt es dem Context hinzu
             _context.Books.Add(_mapper.Map<Book>(bookDTO));
 
