@@ -1,4 +1,4 @@
-﻿namespace Bookanizer.Server.Controller
+﻿namespace Bookanizer.Shared.DTO
 {
     public class UpdateGenreDTO
     {
