@@ -13,7 +13,9 @@ namespace Bookanizer.Server.Interfaces
         public DbSet<User> User { get; set; }
         public DbSet<Author> Author { get; set; }
         public DbSet<Genre> Genre { get; set; }
+        //public DbSet<Series> Series { get; set; }
         public DbSet<BookGenre> BookGenres { get; set; }
+        public DbSet<BookTags> BookTags { get; set; }
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

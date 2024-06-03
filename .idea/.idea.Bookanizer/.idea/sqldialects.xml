@@ -2,7 +2,12 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/Database/Tables/Author.sql" dialect="TSQL" />
+    <file url="file://$PROJECT_DIR$/Database/Tables/BookGenre.sql" dialect="TSQL" />
+    <file url="file://$PROJECT_DIR$/Database/Tables/BookTags.sql" dialect="TSQL" />
     <file url="file://$PROJECT_DIR$/Database/Tables/Books.sql" dialect="TSQL" />
+    <file url="file://$PROJECT_DIR$/Database/Tables/Genre.sql" dialect="TSQL" />
+    <file url="file://$PROJECT_DIR$/Database/Tables/Series.sql" dialect="TSQL" />
+    <file url="file://$PROJECT_DIR$/Database/Tables/Tag.sql" dialect="TSQL" />
     <file url="file://$PROJECT_DIR$/Database/Tables/Test.sql" dialect="TSQL" />
     <file url="file://$PROJECT_DIR$/Database/Tables/User.sql" dialect="TSQL" />
   </component>

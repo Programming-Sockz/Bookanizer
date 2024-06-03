@@ -13,6 +13,11 @@
               <option value="file://$PROJECT_DIR$/Database/Tables/Books.sql" />
               <option value="file://$PROJECT_DIR$/Database/Tables/User.sql" />
               <option value="file://$PROJECT_DIR$/Database/Tables/Author.sql" />
+              <option value="file://$PROJECT_DIR$/Database/Tables/Genre.sql" />
+              <option value="file://$PROJECT_DIR$/Database/Tables/BookGenre.sql" />
+              <option value="file://$PROJECT_DIR$/Database/Tables/BookTags.sql" />
+              <option value="file://$PROJECT_DIR$/Database/Tables/Tag.sql" />
+              <option value="file://$PROJECT_DIR$/Database/Tables/Series.sql" />
             </array>
           </option>
           <option name="remarks" value="Database Project" />

@@ -19,8 +19,10 @@ namespace Bookanizer.Server.Services
         public DbSet<User> User { get; set; }
         public DbSet<Author> Author { get; set; }
         public DbSet<Genre> Genre { get; set; }
+        public DbSet<Tag> Tag { get; set; }
+        //public DbSet<Series> Series { get; set; }
         public DbSet<BookGenre> BookGenres { get; set; }
-
+        public DbSet<BookTags> BookTags { get; set; }
 
 
         public BookanizerDbContext(DbContextOptions<BookanizerDbContext> options) : base(options)
@@ -30,12 +32,17 @@ namespace Bookanizer.Server.Services
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //das hier erstellt für unser programm die relation unserer SQL zusammen
+            //das hier erstellt für unser Programm die relation unserer SQL zusammen
             //im Book.sql haben wir den foreign key erstellt und hier bauen wir ihn auch auf.
             modelBuilder.Entity<Book>()
                 .HasOne(b => b.Author)                // Each Book has one Author
                 .WithMany()                           // An Author can have many Books
                 .HasForeignKey(b => b.AuthorId);     // Foreign key is AuthorId in Book
+
+            //modelBuilder.Entity<Book>()
+            //    .HasOne(b => b.Series)
+            //    .WithMany()
+            //    .HasForeignKey(b => b.SeriesId);
 
 
             modelBuilder.Entity<BookGenre>(entity =>
@@ -51,6 +58,22 @@ namespace Bookanizer.Server.Services
                 entity.HasOne(bg => bg.Genre)
                     .WithMany(g => g.BookGenres)
                     .HasForeignKey(bg => bg.GenreId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<BookTags>(entity =>
+            {
+                entity.ToTable("BookTags");
+                entity.HasKey(e => new { e.BookId, e.TagId });
+
+                entity.HasOne(bg => bg.Book)
+                    .WithMany(b => b.BookTags)
+                    .HasForeignKey(bg => bg.BookId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(bg => bg.Tag)
+                    .WithMany(g => g.BookTags)
+                    .HasForeignKey(bg => bg.TagId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
 

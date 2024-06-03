@@ -14,11 +14,13 @@ namespace Bookanizer.Server.Model
         public int PageCount { get; set; }
         //ein ? nach dem Datentyp heißt das es null sein kann
         public Guid? AuthorId { get; set; }
-        public Guid? SeriesId { get; set; }
+        //public Guid? SeriesId { get; set; }
 
 
         //das hier wird nicht in der datenbank gespeichert sondern ist der author den wir mit dem foreign key gleichzeitig laden können
         public Author? Author { get; set; }
-        public ICollection<BookGenre> BookGenres { get; set; }
+        //public Series? Series { get; set; }
+        public ICollection<BookTags>? BookTags { get; set; }
+        public ICollection<BookGenre>? BookGenres { get; set; }
     }
 }

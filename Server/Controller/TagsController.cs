@@ -9,21 +9,21 @@ namespace Bookanizer.Server.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GenresController : ControllerBase
+    public class TagsController : ControllerBase
     {
         private readonly BookanizerDbContext _context;
         private readonly IMapper _mapper;
 
-        public GenresController(BookanizerDbContext context, IMapper mapper)
+        public TagsController(BookanizerDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(GenreDTO genreDTO)
+        public async Task<IActionResult> Post(TagDTO tagDTO)
         {
-            _context.Genre.Add(_mapper.Map<Genre>(genreDTO));
+            _context.Tag.Add(_mapper.Map<Tag>(tagDTO));
 
             await _context.SaveChangesAsync();
 
@@ -31,16 +31,16 @@ namespace Bookanizer.Server.Controller
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put(GenreDTO genreDTO)
+        public async Task<IActionResult> Put(TagDTO tagDTO)
         {
-            var dbGenre = await _context.Genre.FindAsync(genreDTO.Id);
+            var dbTag = await _context.Tag.FindAsync(tagDTO.Id);
 
-            if (dbGenre == null)
+            if (dbTag == null)
             {
                 return NotFound();
             }
 
-            _mapper.From(genreDTO).AdaptTo(dbGenre);
+            _mapper.From(tagDTO).AdaptTo(dbTag);
 
             await _context.SaveChangesAsync();
 
@@ -50,39 +50,39 @@ namespace Bookanizer.Server.Controller
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var genre = await _context.Genre.FindAsync(id);
+            var tag = await _context.Tag.FindAsync(id);
 
-            if(genre == null)
+            if (tag == null)
             {
                 return NotFound();
             }
 
-            _context.Genre.Remove(genre);
+            _context.Tag.Remove(tag);
 
             await _context.SaveChangesAsync();
 
             return Ok();
         }
 
-        [HttpPost("updategenres")]
-        public async Task<IActionResult> UpdateGenres(UpdateGenreDTO updateGenreDTO)
+        [HttpPost("updatetags")]
+        public async Task<IActionResult> UpdateTags(UpdateTagDTO updateTagDTO)
         {
-            var book = _context.Books
-                           .Include(b => b.BookGenres)
-                           .FirstOrDefault(b => b.Id == updateGenreDTO.BookId);
+            var book = _context.Books.Include(x=>x.BookTags).FirstOrDefault(x=>x.Id == updateTagDTO.BookId);
             if (book == null)
             {
                 return NotFound();
             }
-
-            _context.BookGenres.RemoveRange(book.BookGenres);
-
-            foreach (var genreId in updateGenreDTO.GenreIds)
+            if(book.BookTags.Any())
             {
-                _context.BookGenres.Add(new()
+                _context.BookTags.RemoveRange(book.BookTags);
+            }
+
+            foreach (var tagId in updateTagDTO.TagIds)
+            {
+                _context.BookTags.Add(new()
                 {
-                    BookId = updateGenreDTO.BookId,
-                    GenreId = genreId
+                    BookId = updateTagDTO.BookId,
+                    TagId = tagId
                 });
             }
 
@@ -92,9 +92,9 @@ namespace Bookanizer.Server.Controller
         }
 
         [HttpGet]
-        public async Task<List<GenreDTO>> GetAll()
+        public async Task<List<TagDTO>> GetAll()
         {
-            return _mapper.Map<List<GenreDTO>>(await _context.Genre.ToListAsync());
+            return _mapper.Map<List<TagDTO>>(_context.Tag.ToList());
         }
     }
 }

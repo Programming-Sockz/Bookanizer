@@ -15,10 +15,12 @@ namespace Bookanizer.Shared.DTO
         public int PageCount { get; set; }
         //ein ? nach dem Datentyp heißt das es null sein kann
         public Guid? AuthorId { get; set; }
-        public Guid? SeriesId { get; set; }
+        //public Guid? SeriesId { get; set; }
 
 
         public AuthorDTO? Author { get; set; }
-        public List<GenreDTO> Genres { get; set; } = new();
+        //public SeriesDTO? Series { get; set; }
+        public List<GenreDTO>? Genres { get; set; }
+        public List<TagDTO>? Tags { get; set; }
     }
 }

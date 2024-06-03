@@ -2,12 +2,12 @@
 
 namespace Bookanizer.Server.Model
 {
-    public class Genre
+    public class Series
     {
         [Key]
         public Guid Id { get; set; }
         public string Name { get; set; }
 
-        public ICollection<BookGenre> BookGenres { get; set; }
+        public List<Book> Books { get; set; }
     }
 }

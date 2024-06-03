@@ -32,7 +32,7 @@ namespace Bookanizer.Server.Controller
         public async Task<List<BookDTO>> Get()
         {
             //dieses var ist einfach nur das sich das programm selber raussuchen soll was das für ein typ ist.
-            var books = _context.Books.ToList();
+            var books = await _context.Books.ToListAsync();
 
             //hier können wir sagen das nichts gefunden wurde und einen error 404 zurück geben
             if (books == null || books.Count == 0)
@@ -56,7 +56,7 @@ namespace Bookanizer.Server.Controller
         {
             //Hier wird LinQ benutzt um nach den Namen zu sortieren
             //aka unsere Where abfrage
-            var books = _context.Books.Where(x => x.Title.Contains(bookTitle)).ToList();
+            var books = await _context.Books.Where(x => x.Title.Contains(bookTitle)).ToListAsync();
             if (books == null)
             {
                 return NotFound();
@@ -82,13 +82,15 @@ namespace Bookanizer.Server.Controller
 
         [HttpPost]
         //[FromBody] gibt an das dieser Parameter im Body des HttpRequest steht. wenn es nur ein Parameter gibt sucht es sich das automatisch raus aber ich schreibs hier nochmal rein um es klar zu machen
-        public async Task<IActionResult> Post([FromBody]  BookDTO bookDTO)
+        public async Task<IActionResult> Post([FromBody] BookDTO bookDTO)
         {
             if (bookDTO == null)
             {
                 //error 500 irgendwas ist falsch beim tranfer geloffen. bracuht man aber nicht wirklich
                 return BadRequest();
             }
+
+            var goFuckYourself = _mapper.Map<Book>(bookDTO);
 
             //fügt es dem Context hinzu
             _context.Books.Add(_mapper.Map<Book>(bookDTO));
@@ -123,20 +125,43 @@ namespace Bookanizer.Server.Controller
         [HttpGet("withauthor")]
         public async Task<List<BookDTO>> GetAllWithAuthor()
         {
-            var books = _context.Books
+            var books = await _context.Books
                 .Include(x => x.Author)
                 .Include(b => b.BookGenres)
                     .ThenInclude(bg => bg.Genre)
-                .ToList();
+                .Include(tg=>tg.BookTags)
+                    .ThenInclude(t=>t.Tag)
+                .ToListAsync();
 
             return books.Adapt<List<BookDTO>>();
         }
 
         [HttpGet("withauthor/{id}")]
-        public async Task<List<BookDTO>> GetWithAuthor(Guid id)
+        public async Task<ActionResult<BookDTO>> GetWithAuthor(Guid id)
         {
-            return new();
+            var book = await _context.Books
+                .Include(x => x.Author)
+                //.Include(x=>x.Series)
+                .Include(b => b.BookGenres)
+                    .ThenInclude(bg => bg.Genre)
+                .Include(tg => tg.BookTags)
+                    .ThenInclude(t => t.Tag)
+                .FirstOrDefaultAsync(x=>x.Id == id);
+
+            if(book == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(book.Adapt<BookDTO>());
         }
 
+        //[HttpGet("series")]
+        //public async Task<List<SeriesDTO>> GetSeries()
+        //{
+        //    var series = await _context.Series.Include(x => x.Books).ToListAsync();
+
+        //    return _mapper.Map<List<SeriesDTO>>(series);
+        //}
     }
 }
