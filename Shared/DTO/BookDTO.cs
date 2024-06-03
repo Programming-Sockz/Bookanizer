@@ -19,5 +19,6 @@ namespace Bookanizer.Shared.DTO
 
 
         public AuthorDTO? Author { get; set; }
+        public List<GenreDTO> Genres { get; set; } = new();
     }
 }

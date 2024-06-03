@@ -19,5 +19,6 @@ namespace Bookanizer.Server.Model
 
         //das hier wird nicht in der datenbank gespeichert sondern ist der author den wir mit dem foreign key gleichzeitig laden können
         public Author? Author { get; set; }
+        public ICollection<BookGenre> BookGenres { get; set; }
     }
 }

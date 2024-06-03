@@ -63,6 +63,8 @@
     <Build Include="Tables\Books.sql" />
     <Build Include="Tables\User.sql" />
     <Build Include="Tables\Author.sql" />
+    <Build Include="Tables\Genre.sql" />
+    <Build Include="Tables\BookGenre.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database_Dev.publish.xml" />

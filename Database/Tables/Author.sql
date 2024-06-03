@@ -1,0 +1,6 @@
+CREATE TABLE Author
+(
+	Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT newId(),
+	Name varchar(200) NOT NULL,
+	Alias varchar(200) NULL
+);

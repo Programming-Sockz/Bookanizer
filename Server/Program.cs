@@ -1,3 +1,4 @@
+using Bookanizer.Server.MappingConfig;
 using Bookanizer.Server.Services;
 using MapsterMapper;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -54,5 +55,7 @@ app.UseRouting();
 app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
+
+MappingConfig.RegisterMappings();
 
 app.Run();

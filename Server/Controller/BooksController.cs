@@ -123,8 +123,13 @@ namespace Bookanizer.Server.Controller
         [HttpGet("withauthor")]
         public async Task<List<BookDTO>> GetAllWithAuthor()
         {
-            return _mapper.Map<List<BookDTO>>(_context.Books
-                .Include(x => x.Author).ToList());
+            var books = _context.Books
+                .Include(x => x.Author)
+                .Include(b => b.BookGenres)
+                    .ThenInclude(bg => bg.Genre)
+                .ToList();
+
+            return books.Adapt<List<BookDTO>>();
         }
 
         [HttpGet("withauthor/{id}")]
@@ -132,5 +137,33 @@ namespace Bookanizer.Server.Controller
         {
             return new();
         }
+
+        [HttpPost("updategenres")]
+        public async Task<IActionResult> UpdateGenres(UpdateGenreDTO updateGenreDTO)
+        {
+            var book = _context.Books
+                           .Include(b => b.BookGenres)
+                           .FirstOrDefault(b => b.Id == updateGenreDTO.BookId);
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            _context.BookGenres.RemoveRange(book.BookGenres);
+
+            foreach(var genreId in updateGenreDTO.GenreIds)
+            {
+                _context.BookGenres.Add(new()
+                {
+                    BookId = updateGenreDTO.BookId,
+                    GenreId = genreId
+                });
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
     }
 }
