@@ -2,8 +2,10 @@
 using Bookanizer.Server.Model;
 using Bookanizer.Server.Services;
 using Bookanizer.Shared.DTO;
+using Mapster;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bookanizer.Server.Controller
 {
@@ -45,6 +47,34 @@ namespace Bookanizer.Server.Controller
             await _context.SaveChangesAsync();
 
             return Ok();
+        }
+
+        [HttpGet]
+        public async Task<List<AuthorDTO>> GetAllAuthors()
+        {
+            return _mapper.Map<List<AuthorDTO>>(_context.Author.ToList());
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<AuthorDTO>> GetAuthorWithBooks(Guid id)
+        {
+            var author = _context.Author.Find(id);
+
+            if(author == null)
+            {
+                return NotFound();
+            }
+
+            var authorDTO = _mapper.Map<AuthorDTO>(author);
+            authorDTO.Books = _context.Books
+                .Include(x => x.Author)
+                .Include(b => b.BookGenres)
+                    .ThenInclude(bg => bg.Genre)
+                .Include(tg => tg.BookTags)
+                    .ThenInclude(t => t.Tag)
+                .Where(x => x.AuthorId == id).ToList().Adapt<List<BookDTO>>();
+
+            return authorDTO;
         }
     }
 }
