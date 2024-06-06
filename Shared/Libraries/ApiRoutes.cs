@@ -18,6 +18,10 @@
                 => $"{_base}";
             public static string PUT(Guid id)
                 => $"{_base}/{id}";
+            public static string GET_AllWithFullInfo()
+                => $"{_base}/withFullInfo";
+            public static string GET_WithFullInfo(Guid id)
+                => $"{_base}/withFullInfo/{id}";
         }
 
         public static class User
@@ -36,6 +40,79 @@
                 => $"{_base}/deactivate/{id}";
             public static string PUT_ActivateUser(Guid id)
                 => $"{_base}/activate/{id}";
+        }
+        
+        public static class Author
+        {
+            const string _base = "/api/Author";
+            
+            public static string POST()
+                => $"{_base}";
+            
+            public static string GET_All()
+                => $"{_base}";
+            
+            public static string PUT()
+                => $"{_base}";
+            
+            public static string GET_ById(Guid id)
+                => $"{_base}/{id}";
+        }
+        
+        public static class Tags
+        {
+            const string _base = "/api/Tags";
+            
+            public static string POST()
+                => $"{_base}";
+            
+            public static string GET_All()
+                => $"{_base}";
+            
+            public static string POST_UpdateTags()
+                => $"{_base}";
+            
+            public static string DELETE_ById(Guid id)
+                => $"{_base}/{id}";
+        }
+        
+        public static class Genres
+        {
+            const string _base = "/api/Genres";
+            
+            public static string POST()
+                => $"{_base}";
+            
+            public static string GET_All()
+                => $"{_base}";
+            
+            public static string POST_UpdateGenres()
+                => $"{_base}";
+            
+            public static string DELETE_ById(Guid id)
+                => $"{_base}/{id}";
+        }
+        
+        public static class BookList
+        {
+            private const string _base = "/api/booklist";
+            
+            public static string POST()
+                => $"{_base}";
+
+            public static string PUT()
+                => $"{_base}";
+            
+            public static string GET_ByUserId(Guid id)
+                => $"{_base}/user/{id}";
+
+            public static string GET_ById(Guid id)
+                => $"{_base}/booklist/{id}";
+
+            public static string POST_AddBook()
+                => $"{_base}/addbook";
+            
+            
         }
     }
 }

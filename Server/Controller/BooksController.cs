@@ -120,8 +120,8 @@ namespace Bookanizer.Server.Controller
             return Ok();
         }
 
-        [HttpGet("withauthor")]
-        public async Task<List<BookDTO>> GetAllWithAuthor()
+        [HttpGet("withFullInfo")]
+        public async Task<List<BookDTO>> GetAllWithFullInfo()
         {
             var books = await _context.Books
                 .Include(x => x.Author)
@@ -134,8 +134,8 @@ namespace Bookanizer.Server.Controller
             return books.Adapt<List<BookDTO>>();
         }
 
-        [HttpGet("withauthor/{id}")]
-        public async Task<ActionResult<BookDTO>> GetWithAuthor(Guid id)
+        [HttpGet("withFullInfo/{id}")]
+        public async Task<ActionResult<BookDTO>> GetWithWithFullInfo(Guid id)
         {
             var book = await _context.Books
                 .Include(x => x.Author)
