@@ -60,7 +60,7 @@
     <Folder Include="Tables\" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Scripts\Script.PostDeployment_Shared.sql" />
+    <Build Include="Scripts\TagAndGenreDump.sql" />
     <Build Include="Tables\BookBookList.sql" />
     <Build Include="Tables\BookList.sql" />
     <Build Include="Tables\Test.sql" />
