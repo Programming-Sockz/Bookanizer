@@ -18,6 +18,8 @@
               <option value="file://$PROJECT_DIR$/Database/Tables/BookTags.sql" />
               <option value="file://$PROJECT_DIR$/Database/Tables/Tag.sql" />
               <option value="file://$PROJECT_DIR$/Database/Tables/Series.sql" />
+              <option value="file://$PROJECT_DIR$/Database/Tables/BookList.sql" />
+              <option value="file://$PROJECT_DIR$/Database/Tables/BookBookList.sql" />
             </array>
           </option>
           <option name="remarks" value="Database Project" />

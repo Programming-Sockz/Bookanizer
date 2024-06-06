@@ -94,7 +94,7 @@ namespace Bookanizer.Server.Controller
         [HttpGet]
         public async Task<List<TagDTO>> GetAll()
         {
-            return _mapper.Map<List<TagDTO>>(_context.Tag.ToList());
+            return _mapper.Map<List<TagDTO>>(await _context.Tag.ToListAsync());
         }
     }
 }

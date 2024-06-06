@@ -21,8 +21,11 @@ namespace Bookanizer.Server.Services
         public DbSet<Genre> Genre { get; set; }
         public DbSet<Tag> Tag { get; set; }
         //public DbSet<Series> Series { get; set; }
+        public DbSet<BookList> BookList { get; set; }
+
         public DbSet<BookGenre> BookGenres { get; set; }
         public DbSet<BookTags> BookTags { get; set; }
+        public DbSet<BookBookList> BookBookList { get; set; }
 
 
         public BookanizerDbContext(DbContextOptions<BookanizerDbContext> options) : base(options)
@@ -75,6 +78,12 @@ namespace Bookanizer.Server.Services
                     .WithMany(g => g.BookTags)
                     .HasForeignKey(bg => bg.TagId)
                     .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<BookBookList>().HasKey(bbl => new
+            {
+                bbl.BookId,
+                bbl.BookListId
             });
 
             if (!string.IsNullOrWhiteSpace(Schema))

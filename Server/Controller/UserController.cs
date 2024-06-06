@@ -3,6 +3,7 @@ using Bookanizer.Server.Services;
 using Bookanizer.Shared.DTO;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bookanizer.Server.Controller
 {
@@ -28,7 +29,8 @@ namespace Bookanizer.Server.Controller
             //FROM User;
             //und mit dem new UserDTO() kann ich aus diesen daten direkt unser UserDTO erstellen.
             var users = _context.User.Where(x=>x.Active).Select(x => new UserDTO(){ Id = x.Id, UserName = x.UserName, CreatedOn = x.CreatedOn}).ToList();
-
+            
+            
             //man könnte auch erst alle user holen und dann in das UserDTO umwandeln
             //var users = _context.User.ToList();
             //List<UserDTO> userDTOs = mapper.Map<List<UserDTO>>(users);
@@ -44,7 +46,7 @@ namespace Bookanizer.Server.Controller
             //wir benutzen das selbe select aber haben jetzt ein FirstOrDefault.
             //.FirstOrDefault() und .First() machen das selbe ab .First() wirft ein Fehler wenn nichts gefunden wurde und .FirstOrDefault() gibt null zurück
             // ist nützlich um errors leicht zu handeln
-            var user = _context.User.Where(x=>x.Active && x.Id == id).Select(x => new UserDTO() { Id = x.Id, UserName = x.UserName, CreatedOn = x.CreatedOn }).FirstOrDefault();
+            var user = await _context.User.Where(x=>x.Active && x.Id == id).Select(x => new UserDTO() { Id = x.Id, UserName = x.UserName, CreatedOn = x.CreatedOn }).FirstOrDefaultAsync();
 
             if(user == null)
             {
@@ -99,7 +101,7 @@ namespace Bookanizer.Server.Controller
             }
             else
             {
-                var user = _context.User.First(x => x.Email == loginDTO.Email);
+                var user = await _context.User.FirstAsync(x => x.Email == loginDTO.Email);
                 if(!user.Active)
                 {
                     return new LoginResponseDTO() { Success = false, ErrorMessage = "User is deactivated" };

@@ -3,6 +3,7 @@ using Bookanizer.Server.Model;
 using Bookanizer.Server.Services;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bookanizer.Server.Controller
 {
@@ -22,7 +23,7 @@ namespace Bookanizer.Server.Controller
         [HttpGet]
         public async Task<ActionResult<List<Test>>> GetTest()
         {
-            var tests = _context.Test.ToList();
+            var tests = await _context.Test.ToListAsync();
             return Ok(tests);
         }
 

@@ -52,7 +52,7 @@ namespace Bookanizer.Server.Controller
         [HttpGet]
         public async Task<List<AuthorDTO>> GetAllAuthors()
         {
-            return _mapper.Map<List<AuthorDTO>>(_context.Author.ToList());
+            return _mapper.Map<List<AuthorDTO>>(await _context.Author.ToListAsync());
         }
 
         [HttpGet("{id}")]
@@ -66,13 +66,13 @@ namespace Bookanizer.Server.Controller
             }
 
             var authorDTO = _mapper.Map<AuthorDTO>(author);
-            authorDTO.Books = _context.Books
+            authorDTO.Books = (await _context.Books
                 .Include(x => x.Author)
                 .Include(b => b.BookGenres)
-                    .ThenInclude(bg => bg.Genre)
+                .ThenInclude(bg => bg.Genre)
                 .Include(tg => tg.BookTags)
-                    .ThenInclude(t => t.Tag)
-                .Where(x => x.AuthorId == id).ToList().Adapt<List<BookDTO>>();
+                .ThenInclude(t => t.Tag)
+                .Where(x => x.AuthorId == id).ToListAsync()).Adapt<List<BookDTO>>();
 
             return authorDTO;
         }
