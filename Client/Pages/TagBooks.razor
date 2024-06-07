@@ -1,0 +1,24 @@
+﻿@page "/tag/{id:guid}"
+@using Bookanizer.Shared.DTO
+@using Bookanizer.Shared.Libraries
+@using Bookanizer.Client.Components
+
+<h2>@tag.Name</h2>
+
+@foreach (var book in books)
+{
+    <Bookinfo Book="book"></Bookinfo>
+}
+@code {
+    [Parameter] public Guid Id { get; set; }
+    [Inject] public HttpClient Http { get; set; }
+    public TagDTO tag = new();
+    public List<BookDTO> books = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        tag = await Http.GetFromJsonAsync<TagDTO>(ApiRoutes.Tags.GET_ById(Id));
+
+        books = await Http.GetFromJsonAsync<List<BookDTO>>(ApiRoutes.Tags.GET_BooksById(tag.Id));
+    }
+}

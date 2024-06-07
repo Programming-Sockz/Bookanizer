@@ -2,12 +2,13 @@
 @using Blazored.LocalStorage
 @using Bookanizer.Shared.DTO
 @using Bookanizer.Shared.Libraries
+@using Bookanizer.Client.Components
 <button style="position:absolute; height:30px;width:50px;top:0;left:0;" @onclick="ShowMenu">menu</button>
 <div style="position:absolute; top:30px;left:0;width:200px;border:solid 2px black; padding:10px" hidden="@showMenu">
     <a href="index">Index seite (razor beispiele)</a>
     <a href="apiexamples">Api-Examples</a>
-    <hr />
-    @if(loggedInUser.Id != Guid.Empty)
+    <hr/>
+    @if (loggedInUser.Id != Guid.Empty)
     {
         <p>Logged in as: @loggedInUser.UserName</p>
         <a @onclick="LogOut">Logout</a>
@@ -18,34 +19,64 @@
         <a href="register">Register</a>
     }
 </div>
-<div style="text-align:center!important">
-    <div style="width:400px;height:400px;border:solid 1px black;margin-top:50px;margin-bottom:50px;margin-left: calc(50% - 200px);">
-        <p style="margin-top:50%">Your Logo could be here</p>
+<div class="text-center">
+    <div class="homepage-icon">
+        <p>Your Logo could be here</p>
     </div>
     <div class="">
-        <input style="width:200px" placeholder="Suchen..." @bind-value="searchText" />
-        <button @onclick="StartSearch">Suchen</button>
+        <input style="width:200px" placeholder="Search for books..." @bind-value="searchText"/>
+        <button @onclick="StartSearch">Search</button>
     </div>
 </div>
+
+@if (loggedInUser.Id != Guid.Empty)
+{
+    <h2>Your Booklists</h2>
+    @if (userBookLists.Any())
+    {
+        @foreach (var bookList in userBookLists)
+        {
+            <h3>@bookList.Name</h3>
+            @if (bookList.Books.Any())
+            {
+                @foreach (var book in bookList.Books)
+                {
+                    <Bookinfo Book="book"></Bookinfo>
+                }
+            }
+        }
+    }
+}
 
 @code {
     [Inject] public HttpClient Http { get; set; }
     [Inject] public NavigationManager Navigation { get; set; }
     [Inject] public ILocalStorageService LocalStorageService { get; set; }
-    private string loginStorageKey = "loginStamp";
+    private static string loginStorageKey = "loginStamp";
     private string searchText = "";
     private bool showMenu = true;
     private UserDTO loggedInUser = new();
+    private List<BookListDTO> userBookLists = new();
 
     protected override async Task OnInitializedAsync()
     {
         var loggedInUser = await LocalStorageService.GetItemAsync<LoginResponseDTO>(loginStorageKey);
-        if(loggedInUser != null && loggedInUser.LoginStamp != Guid.Empty)
+        if (loggedInUser != null && loggedInUser.LoginStamp != Guid.Empty)
         {
             this.loggedInUser = await Http.GetFromJsonAsync<UserDTO>(ApiRoutes.User.GET_UserById(loggedInUser.UserId.Value));
+            if (this.loggedInUser != null && this.loggedInUser.Id != Guid.Empty)
+            {
+                await GetUserBookList();
+            }
         }
     }
-    
+
+    private async Task GetUserBookList()
+    {
+        userBookLists = await Http.GetFromJsonAsync<List<BookListDTO>>(ApiRoutes.BookList.GET_ByUserId(loggedInUser.Id));
+        StateHasChanged();
+    }
+
     private void StartSearch()
     {
         Navigation.NavigateTo("/search/" + searchText);

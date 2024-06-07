@@ -76,5 +76,18 @@ namespace Bookanizer.Server.Controller
 
             return authorDTO;
         }
+
+        [HttpGet("name/{name}")]
+        public async Task<List<AuthorDTO>> GetByName(string name)
+        {
+            var authors = await _context.Author.Where(x => x.Name.Contains(name) || x.Alias.Contains(name)).ToListAsync();
+
+            if (!authors.Any())
+            {
+                return new();
+            }
+
+            return _mapper.Map<List<AuthorDTO>>(authors);
+        }
     }
 }

@@ -11,6 +11,9 @@ namespace Bookanizer.Server.Model
         public Guid Id { get; set; }
         public string Title { get; set; }
         public DateTime ReleaseDate { get; set; }
+        public string? Description { get; set; }
+        public string? ImageLink { get; set; }
+
         public int PageCount { get; set; }
         //ein ? nach dem Datentyp heißt das es null sein kann
         public Guid? AuthorId { get; set; }

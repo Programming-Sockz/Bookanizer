@@ -1,0 +1,24 @@
+﻿@page "/genre/{id:guid}"
+@using Bookanizer.Shared.DTO
+@using Bookanizer.Shared.Libraries
+@using Bookanizer.Client.Components
+
+<h2>@genre.Name</h2>
+
+@foreach (var book in books)
+{
+    <Bookinfo Book="book"></Bookinfo>
+}
+@code {
+    [Parameter] public Guid Id { get; set; }
+    [Inject] public HttpClient Http { get; set; }
+    public GenreDTO genre = new();
+    public List<BookDTO> books = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        genre = await Http.GetFromJsonAsync<GenreDTO>(ApiRoutes.Genres.GET_ById(Id));
+
+        books = await Http.GetFromJsonAsync<List<BookDTO>>(ApiRoutes.Genres.GET_BooksById(genre.Id));
+    }
+}

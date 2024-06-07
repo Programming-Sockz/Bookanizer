@@ -56,14 +56,21 @@ namespace Bookanizer.Server.Controller
         {
             //Hier wird LinQ benutzt um nach den Namen zu sortieren
             //aka unsere Where abfrage
-            var books = await _context.Books.Where(x => x.Title.Contains(bookTitle)).ToListAsync();
+            var books = await _context.Books.Where(x => x.Title.Contains(bookTitle))
+                .Include(x => x.Author)
+                .Include(b => b.BookGenres)
+                .ThenInclude(bg => bg.Genre)
+                .Include(tg=>tg.BookTags)
+                .ThenInclude(t=>t.Tag)
+                .ToListAsync();
+            
             if (books == null)
             {
-                return NotFound();
+                return new List<BookDTO>();
             }
 
             //man kann sich das mapping und return ein bischen abkürzen
-            return Ok(_mapper.Map<List<BookDTO>>(books));
+            return Ok(books.Adapt<List<BookDTO>>());
         }
 
         [HttpGet("id/{bookId}")]
@@ -86,18 +93,21 @@ namespace Bookanizer.Server.Controller
         {
             if (bookDTO == null)
             {
-                //error 500 irgendwas ist falsch beim tranfer geloffen. bracuht man aber nicht wirklich
+                //error 500 irgendwas ist beim Transfer fehlgeschlagen. Braucht man aber nicht wirklich
                 return BadRequest();
             }
 
+            var book = _mapper.Map<Book>(bookDTO);
+            
             //fügt es dem Context hinzu
-            _context.Books.Add(_mapper.Map<Book>(bookDTO));
+            _context.Books.Add(book);
 
             //speichert diese ab
             await _context.SaveChangesAsync();
 
             //alles gut gelaufen. wir geben code 200 (succes) zurück
-            return Ok();
+            //und gibt auch das erstellte element zurück zur weiteren verrbeitung
+            return Ok(book.Adapt<BookDTO>());
         }
 
         [HttpPut("{bookId}")]
@@ -141,9 +151,9 @@ namespace Bookanizer.Server.Controller
                 .Include(x => x.Author)
                 //.Include(x=>x.Series)
                 .Include(b => b.BookGenres)
-                    .ThenInclude(bg => bg.Genre)
+                .ThenInclude(bg => bg.Genre)
                 .Include(tg => tg.BookTags)
-                    .ThenInclude(t => t.Tag)
+                .ThenInclude(t => t.Tag)
                 .FirstOrDefaultAsync(x=>x.Id == id);
 
             if(book == null)
@@ -152,6 +162,27 @@ namespace Bookanizer.Server.Controller
             }
 
             return Ok(book.Adapt<BookDTO>());
+        }
+        
+        [HttpGet("author/{id}")]
+        public async Task<ActionResult<BookDTO>> GetByAuthor(Guid id)
+        {
+            var book = await _context.Books
+                .Where(x=>x.AuthorId == id)
+                .Include(x => x.Author)
+                //.Include(x=>x.Series)
+                .Include(b => b.BookGenres)
+                .ThenInclude(bg => bg.Genre)
+                .Include(tg => tg.BookTags)
+                .ThenInclude(t => t.Tag)
+                .ToListAsync();
+
+            if(book == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(book.Adapt<List<BookDTO>>());
         }
 
         //[HttpGet("series")]

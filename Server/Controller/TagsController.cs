@@ -1,6 +1,7 @@
 ﻿using Bookanizer.Server.Model;
 using Bookanizer.Server.Services;
 using Bookanizer.Shared.DTO;
+using Mapster;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -95,6 +96,59 @@ namespace Bookanizer.Server.Controller
         public async Task<List<TagDTO>> GetAll()
         {
             return _mapper.Map<List<TagDTO>>(await _context.Tag.ToListAsync());
+        }
+        
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TagDTO>> GetById(Guid id)
+        {
+            var tag = await _context.Tag.FindAsync(id);
+
+            if (tag == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<TagDTO>(tag));
+        }
+
+        [HttpGet("books/{id}")]
+        public async Task<ActionResult<List<BookDTO>>> GetAllBooksForGenre(Guid id)
+        {
+            var bookTags = await _context.BookTags.Where(x => x.TagId == id).ToListAsync();
+
+            if (!bookTags.Any())
+            {
+                return new List<BookDTO>();
+            }
+
+            List<BookDTO> bookDtos = new();
+            
+            foreach (var bookTag in bookTags)
+            {
+                bookDtos.Add((await _context.Books
+                    .Include(x => x.Author)
+                    //.Include(x=>x.Series)
+                    .Include(b => b.BookGenres)
+                    .ThenInclude(bg => bg.Genre)
+                    .Include(tg => tg.BookTags)
+                    .ThenInclude(t => t.Tag)
+                    .FirstOrDefaultAsync(x => x.Id == bookTag.BookId)).Adapt<BookDTO>());
+            }
+            
+            return Ok(bookDtos);
+        }
+
+        [HttpGet("name/{name}")]
+        public async Task<List<TagDTO>> GetByName(string name)
+        {
+            var tags = await _context.Tag.Where(x => x.Name.Contains(name)).ToListAsync();
+
+            if (!tags.Any())
+            {
+                return new();
+            }
+
+            return _mapper.Map<List<TagDTO>>(tags);
         }
     }
 }

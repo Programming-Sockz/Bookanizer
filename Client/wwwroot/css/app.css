@@ -52,3 +52,67 @@ h1:focus {
 .validation-message {
     color:red;
 }
+
+.homepage-icon {
+    width:400px;
+    height:400px;
+    border:solid 1px black;
+    margin-top:50px;
+    margin-bottom:50px;
+    margin-left: calc(50% - 200px);
+}
+    .homepage-icon p {
+        margin-top:50%;
+    } 
+
+.book-cover, .no-cover {
+    max-width: 100%!important;
+    max-height: 400px;
+}
+
+.no-cover {
+    background-color: lightgray;
+    border: solid black 1px;
+}
+    .no-cover p {
+        margin-top: 45%;
+    }
+    
+.book-description {
+    max-height: 400px;
+    text-overflow: ellipsis;
+}
+.genre-container {
+    width:100%!important;
+    overflow:hidden!important;
+}
+.genre-pill {
+    background-color: lightblue;
+    border: 1px deepskyblue solid;
+    border-radius: 4px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+    .genre-pill:hover {
+        background-color:deepskyblue;
+        transition:250ms;
+    }
+.tag-container {
+    width:100%!important;
+    overflow:hidden!important;
+}
+.tag-pill {
+    background-color: lightgray;
+    border: 1px slategray solid;
+    border-radius: 4px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+    .tag-pill:hover {
+        background-color: lightslategray;
+        transition:250ms;
+        color:white;
+    }
+    main {
+        overflow-x: hidden
+    }

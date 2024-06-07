@@ -1,14 +1,17 @@
 ﻿@page "/search/{searchText}"
 @using Bookanizer.Shared.DTO
 @using Bookanizer.Shared.Libraries
+@using Bookanizer.Client.Components
 @if (books != null && books.Any())
 {
-    <ul>
-        @foreach (var book in books)
-        {
-            <li style="cursor:pointer">@book.Title released am @book.ReleaseDate </li>
-        }
-    </ul>
+    @foreach (var book in books)
+    {
+        <Bookinfo Book="book" />
+    }
+}
+else
+{
+    <p>We found no Book matching your search.</p>
 }
 @code {
     [Parameter] public string searchText { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace Bookanizer.Shared.Libraries
 {
-    //hier stehen alle API Routen sortiert drinnen die wir benutzen. Das wird nicht gebracuht aber sammelt alle Routen einfach für den Überblick
+    //hier stehen alle API Routen sortiert drinnen, die wir benutzen. Das wird nicht gebracuht aber sammelt alle Routen einfach für den Überblick
     public static class ApiRoutes
     {
         //diese Unterteilt man einfach nur für übersicht in Klassen
@@ -22,6 +22,8 @@
                 => $"{_base}/withFullInfo";
             public static string GET_WithFullInfo(Guid id)
                 => $"{_base}/withFullInfo/{id}";
+            public static string GET_ByAuthorId(Guid id)
+                => $"{_base}/author/{id}";
         }
 
         public static class User
@@ -57,6 +59,8 @@
             
             public static string GET_ById(Guid id)
                 => $"{_base}/{id}";
+            public static string GET_ByName(string name)
+                => $"{_base}/name/{name}";
         }
         
         public static class Tags
@@ -74,6 +78,12 @@
             
             public static string DELETE_ById(Guid id)
                 => $"{_base}/{id}";
+            public static string GET_ById(Guid id)
+                => $"{_base}/{id}";
+            public static string GET_BooksById(Guid id)
+                => $"{_base}/books/{id}";
+            public static string GET_ByName(string name)
+                => $"{_base}/name/{name}";
         }
         
         public static class Genres
@@ -91,6 +101,12 @@
             
             public static string DELETE_ById(Guid id)
                 => $"{_base}/{id}";
+            public static string GET_ById(Guid id)
+                => $"{_base}/{id}";
+            public static string GET_BooksById(Guid id)
+                => $"{_base}/books/{id}";
+            public static string GET_ByName(string name)
+                => $"{_base}/name/{name}";
         }
         
         public static class BookList
@@ -111,8 +127,6 @@
 
             public static string POST_AddBook()
                 => $"{_base}/addbook";
-            
-            
         }
     }
 }
