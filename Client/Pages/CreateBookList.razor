@@ -1,0 +1,68 @@
+﻿@page "/CreateBookList"
+@using Blazored.LocalStorage
+@using Bookanizer.Shared.DTO
+@using Bookanizer.Shared.Enums
+@using Bookanizer.Shared.Libraries
+<AntDesign.Spin Spinning="isLoading || isSubmitting" Tip="@(isLoading ? "Loading..." : "Submitting...")">
+    <div class="row">
+        <div class="col p5">
+            <input type="text" @bind="bookList.Name" />
+        </div>
+        <div class="col p5">
+            <select @bind="bookList.ListType">
+                @foreach (ListTypes listType in Enum.GetValues(typeof(ListTypes)))
+                {
+                    <option value="@listType">@listType</option>
+                }
+            </select>
+        </div>
+    </div>
+    <br/>
+    <button @onclick="OnSubmit">Submit</button>
+</AntDesign.Spin>
+
+@code {
+    [Inject] public HttpClient Http { get; set; }
+    [Inject] public ILocalStorageService LocalStorageService { get; set; }
+    [Inject] public NavigationManager NavigationManager { get; set; }
+    private static string loginStorageKey = "loginStamp";
+    private UserDTO loggedInUser = new();
+    private bool isLoading = true;
+    private bool isSubmitting = false;
+
+    private BookListDTO bookList = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var loggedInUser = await LocalStorageService.GetItemAsync<LoginResponseDTO>(loginStorageKey);
+        if (loggedInUser != null && loggedInUser.LoginStamp != Guid.Empty)
+        {
+            this.loggedInUser = await Http.GetFromJsonAsync<UserDTO>(ApiRoutes.User.GET_UserById(loggedInUser.UserId.Value));
+            if (this.loggedInUser == null || this.loggedInUser.Id == Guid.Empty)
+            {
+                NavigationManager.NavigateTo("");
+            }
+        }
+        else
+        {
+            NavigationManager.NavigateTo("");
+        }
+
+        isLoading = false;
+    }
+
+    private async Task OnSubmit()
+    {
+        isSubmitting = true;
+        bookList.CreatedById = loggedInUser.Id;
+        bookList.CreatedOn = DateTime.Now;
+
+        var result = await Http.PostAsJsonAsync(ApiRoutes.BookList.POST(), bookList);
+
+        if (result.IsSuccessStatusCode)
+        {
+            NavigationManager.NavigateTo("");
+        }
+    }
+
+}

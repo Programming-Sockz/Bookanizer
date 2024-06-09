@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using Blazored.LocalStorage
+@using Blazored.Modal.Services
 @using Bookanizer.Shared.DTO
 @using Bookanizer.Shared.Libraries
 @using Bookanizer.Client.Components
@@ -7,6 +8,8 @@
 <div style="position:absolute; top:30px;left:0;width:200px;border:solid 2px black; padding:10px" hidden="@showMenu">
     <a href="index">Index seite (razor beispiele)</a>
     <a href="apiexamples">Api-Examples</a>
+    <hr/>
+    <a href="create">Create book</a>
     <hr/>
     @if (loggedInUser.Id != Guid.Empty)
     {
@@ -52,6 +55,7 @@
     [Inject] public HttpClient Http { get; set; }
     [Inject] public NavigationManager Navigation { get; set; }
     [Inject] public ILocalStorageService LocalStorageService { get; set; }
+    [CascadingParameter] public IModalService ModalService { get; set; }
     private static string loginStorageKey = "loginStamp";
     private string searchText = "";
     private bool showMenu = true;

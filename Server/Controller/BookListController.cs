@@ -127,6 +127,38 @@ namespace Bookanizer.Server.Controller
 
             return Ok(bookListDTOs);
         }
+        
+        
+        [HttpGet("user/brief/{id}")]
+        public async Task<ActionResult<List<BookListDTO>>> GetBookListForUserBrief(Guid id)
+        {
+            // Fetch the user
+            var user = await _context.User
+                .Where(x => x.Active && x.Id == id)
+                .Select(x => new UserDTO() { Id = x.Id, UserName = x.UserName, CreatedOn = x.CreatedOn })
+                .FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            // Fetch the book lists
+            var bookLists = await _context.BookList
+                .Where(x => x.CreatedById == id)
+                .ToListAsync();
+
+            List<BookListDTO> bookListDTOs = new();
+
+            foreach (var bookList in bookLists)
+            {
+                BookListDTO bookListDTO = _mapper.Map<BookListDTO>(bookList);
+                bookListDTO.CreatedBy = user;
+                bookListDTOs.Add(bookListDTO);
+            }
+
+            return Ok(_mapper.Map<List<BookListDTO>>(bookLists));
+        }
 
         [HttpGet("bookList/{id}")]
         public async Task<ActionResult<BookListDTO>> GetBookListById(Guid id)

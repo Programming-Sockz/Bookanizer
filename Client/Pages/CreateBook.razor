@@ -1,0 +1,182 @@
+﻿@page "/create"
+@page "/edit/{BookId:guid}"
+@using Bookanizer.Shared.DTO
+@using Bookanizer.Shared.Libraries
+@using Microsoft.AspNetCore.Components.Forms
+@using AntDesign
+<Spin Spinning="isLoading || isSubmitting" Tip="@(isLoading ? "Loading..." : "Submitting...")">
+    <div class="p-5">
+        <EditForm Model="book" OnSubmit="OnSubmit">
+            <DataAnnotationsValidator/>
+            <div class="row">
+                <div class="col-3 p-4">
+                    <input type="text" @bind="book.Title" placeholder="Book title"/>
+                    <ValidationMessage For="@(() => book.Title)"/>
+                </div>
+                <div class="col-3 p-4">
+                    <input type="text" placeholder="Image Link" @bind="book.ImageLink"/>
+                </div>
+                <div class="col-3 p-4">
+                    <input type="date" @bind="book.ReleaseDate"/>
+                    <ValidationMessage For="@(() => book.ReleaseDate)"/>
+                </div>
+                <div class="col-3 p-4">
+                    <input type="number" @bind="book.PageCount" placeholder="Page count"/>
+                </div>
+                <div class="col-12 p-4">
+                    <textarea placeholder="Description" @bind="book.Description" class="w-100" rows="5"></textarea>
+                </div>
+                <div class="col-12 p-4">
+                    <AntDesign.Select DataSource="@authorSearchResult"
+                                      EnableSearch="true"
+                                      Style="width: 100%;"
+                                      ValueName="@nameof(AuthorDTO.Id)"
+                                      LabelName="@nameof(AuthorDTO.Name)"
+                                      TItemValue="Guid"
+                                      TItem="AuthorDTO"
+                                      Placeholder="Author"
+                                      ShowArrowIcon="false"
+                                      SearchDebounceMilliseconds="300"
+                                      ShowSearchIcon="true"
+                                      Class="author-search-select"
+                                      OnSearch="(async value => await OnAuthorSearch(value))"
+                                      OnSelectedItemChanged="s=>OnAuthorSelected(s)">
+                    </AntDesign.Select>
+                </div>
+                <h2>Genres:</h2>
+                @foreach (var genre in genres.OrderBy(x=>x.Name))
+                {
+                    <div class="col-4 checkbox-container">
+                        <input type="checkbox" id="check-@genre.Name" @onclick="() => ToggleGenre(genre.Id)" checked="@IsGenreSelcted(genre.Id)">
+                        <label for="check-@genre.Name">@genre.Name</label>
+                    </div>
+                }
+                <h2>Tags:</h2>
+                <Select Mode="tags"
+                        Placeholder="Please select"
+                        DataSource="tags.OrderBy(x=>x.Name)"
+                        @bind-Values="@selectedTags"
+                        TItemValue="Guid"
+                        TItem="TagDTO"
+                        LabelName="@nameof(TagDTO.Name)"
+                        ValueName="@nameof(TagDTO.Id)"
+                        Style="width: 50%; margin-left: 10px"
+                        EnableSearch
+                        SearchDebounceMilliseconds="500"
+                        EnableVirtualization>
+                </Select>
+            </div>
+            <br/>
+            <button type="submit">Submit</button>
+        </EditForm>
+    </div>
+</Spin>
+
+@code {
+    [Parameter] public Guid? BookId { get; set; }
+    [Inject] public HttpClient Http { get; set; }
+    [Inject] public NavigationManager NavigationManager { get; set; }
+
+    private BookDTO book = new();
+    private List<GenreDTO> genres = new();
+    private List<Guid> selectedGenres = new();
+    private List<TagDTO> tags = new();
+    private IEnumerable<Guid> selectedTags;
+    private bool isLoading = true;
+    private bool isSubmitting = false;
+    private List<AuthorDTO> authorSearchResult = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (BookId.HasValue && BookId != Guid.Empty)
+        {
+            book = await Http.GetFromJsonAsync<BookDTO>(ApiRoutes.Books.GET_ById(BookId.Value)) ?? new();
+        }
+
+        genres = await Http.GetFromJsonAsync<List<GenreDTO>>(ApiRoutes.Genres.GET_All());
+        tags = await Http.GetFromJsonAsync<List<TagDTO>>(ApiRoutes.Tags.GET_All());
+
+        isLoading = false;
+    }
+
+    private async Task OnSubmit()
+    {
+        isSubmitting = true;
+        Guid bookIdResult = Guid.Empty;
+        if (book.Id == Guid.Empty)
+        {
+            var result = await Http.PostAsJsonAsync(ApiRoutes.Books.POST(), book);
+            if (result.IsSuccessStatusCode)
+            {
+                bookIdResult = (await result.Content.ReadFromJsonAsync<BookDTO>()).Id;
+            }
+        }
+        else
+        {
+            var result = await Http.PostAsJsonAsync(ApiRoutes.Books.POST(), book);
+            bookIdResult = book.Id;
+        }
+
+        await Http.PostAsJsonAsync(ApiRoutes.Genres.POST_UpdateGenres(), new UpdateGenreDTO(){ BookId = bookIdResult, GenreIds = selectedGenres});
+        await Http.PostAsJsonAsync(ApiRoutes.Tags.POST_UpdateTags(), new UpdateTagDTO(){ BookId = bookIdResult, TagIds = selectedTags.ToList()});
+        NavigationManager.NavigateTo("");
+    }
+
+    private void ToggleGenre(Guid genre)
+    {
+        if (selectedGenres.Any(x => x == genre))
+        {
+            selectedGenres.Remove(genre);
+        }
+        else
+        {
+            selectedGenres.Add(genre);
+        }
+
+        StateHasChanged();
+    }
+
+    private bool IsGenreSelcted(Guid genre)
+    {
+        return selectedGenres.Any(x => x == genre);
+    }
+    
+    Task<List<AuthorDTO>> _oldTask;
+
+    private async Task OnAuthorSearch(string searchText)
+    {
+        if (!string.IsNullOrWhiteSpace(searchText) && searchText.Length > 1)
+        {
+            if (_oldTask == null || _oldTask.IsCompleted)
+            {
+
+                _oldTask = Http.GetFromJsonAsync<List<AuthorDTO>>(ApiRoutes.Author.GET_ByName(searchText));
+
+                var content = await _oldTask;
+
+                if (content != null)
+                {
+                    authorSearchResult.Clear();
+                    StateHasChanged();
+                    authorSearchResult = content;
+                    StateHasChanged();
+                }
+                else
+                {
+                    authorSearchResult.Clear();
+                    StateHasChanged();
+                }
+            }
+        }
+        else if (string.IsNullOrWhiteSpace(searchText))
+        {
+            if (authorSearchResult.Any())
+                authorSearchResult.Clear();
+        }
+    }
+    
+    private async Task OnAuthorSelected(AuthorDTO match)
+    {
+        book.AuthorId = match.Id;
+    }
+}

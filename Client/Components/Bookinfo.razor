@@ -15,6 +15,12 @@
     </div>
     <div class="col me-0 pe-5">
         <p><b>@Book.Title</b></p>
+        @if (ChildContent != null)
+        {
+            <span class="float-end">
+                @ChildContent
+            </span>
+        }
         @if (Book.Author != null)
         {
             <p>By: <a href="author/@Book.Author.Id">@(Book.Author.Alias ?? Book.Author.Name)</a></p>
@@ -45,6 +51,7 @@
 
 @code {
     [Parameter] public BookDTO Book { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
     [Inject] public NavigationManager NavigationManager { get; set; }
 
     private void GoToGenre(Guid id)

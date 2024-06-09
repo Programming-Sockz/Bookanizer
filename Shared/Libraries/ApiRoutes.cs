@@ -74,7 +74,7 @@
                 => $"{_base}";
             
             public static string POST_UpdateTags()
-                => $"{_base}";
+                => $"{_base}/updatetags";
             
             public static string DELETE_ById(Guid id)
                 => $"{_base}/{id}";
@@ -97,7 +97,7 @@
                 => $"{_base}";
             
             public static string POST_UpdateGenres()
-                => $"{_base}";
+                => $"{_base}/updategenres";
             
             public static string DELETE_ById(Guid id)
                 => $"{_base}/{id}";
@@ -121,6 +121,9 @@
             
             public static string GET_ByUserId(Guid id)
                 => $"{_base}/user/{id}";
+            
+            public static string GET_ByUserIdBrief(Guid id)
+                => $"{_base}/user/brief/{id}";
 
             public static string GET_ById(Guid id)
                 => $"{_base}/booklist/{id}";

@@ -113,6 +113,16 @@ h1:focus {
         transition:250ms;
         color:white;
     }
-    main {
-        overflow-x: hidden
-    }
+    
+main {
+    overflow-x: hidden
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-container input[type="checkbox"] {
+    margin-right: 10px; /* Adjust the space between the checkbox and the label */
+}

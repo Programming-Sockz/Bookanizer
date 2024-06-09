@@ -14,5 +14,6 @@ builder.Services.AddScoped(sp => new HttpClient
 });
 builder.Services.AddBlazoredModal();
 builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddAntDesign();
 
 await builder.Build().RunAsync();
