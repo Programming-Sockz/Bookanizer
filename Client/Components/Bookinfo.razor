@@ -1,6 +1,6 @@
 ﻿@using Bookanizer.Shared.DTO
 
-<div class="row" style="max-width: 100vw">
+<div class="book-display">
     <div class="col-2">
         @if (Book.ImageLink == null)
         {
@@ -14,7 +14,7 @@
         }
     </div>
     <div class="col me-0 pe-5">
-        <p><b>@Book.Title</b></p>
+        <h2 class="book-title"><b>@Book.Title</b></h2>
         @if (ChildContent != null)
         {
             <span class="float-end">
@@ -28,6 +28,7 @@
         @if (Book.Genres != null)
         {
             <div class="genre-container">
+                <span><b>Genre: </b></span>
                 @foreach (var genre in Book.Genres)
                 {
                     <span @onclick="() => GoToGenre(genre.Id)" class="genre-pill">@genre.Name</span>
@@ -37,6 +38,7 @@
         @if (Book.Tags != null)
         {
             <div class="tag-container">
+                <span><b>Tags: </b></span>
                 @foreach (var tag in Book.Tags)
                 {
                     <span @onclick="() => GoToTag(tag.Id)" class="tag-pill">@tag.Name</span>

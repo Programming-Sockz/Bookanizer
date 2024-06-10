@@ -4,6 +4,9 @@
 @using Bookanizer.Client.Components
 @using AntDesign
 @using Blazored.LocalStorage
+<div class="search-results">
+    <h2>Search Results for: @searchText</h2>
+</div>
 @if (books != null && books.Any())
 {
     @foreach (var book in books)

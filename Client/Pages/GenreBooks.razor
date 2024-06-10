@@ -3,7 +3,9 @@
 @using Bookanizer.Shared.Libraries
 @using Bookanizer.Client.Components
 
-<h2>@genre.Name</h2>
+<div class="search-results">
+    <h2>All @genre.Name Books</h2>
+</div>
 
 @foreach (var book in books)
 {

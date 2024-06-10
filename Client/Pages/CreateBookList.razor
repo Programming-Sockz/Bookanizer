@@ -4,9 +4,14 @@
 @using Bookanizer.Shared.Enums
 @using Bookanizer.Shared.Libraries
 <AntDesign.Spin Spinning="isLoading || isSubmitting" Tip="@(isLoading ? "Loading..." : "Submitting...")">
-    <div class="row">
-        <div class="col p5">
-            <input type="text" @bind="bookList.Name" />
+    <div class="create-list">
+        <h1>Create a new List:</h1>
+        <p>Lists are the best way to organize your library.</p>
+        <p>You can create as many as you want!</p>
+        <div class="create-form">
+            <label><b>List Name: </b></label>
+            <input class="create-list-name-input" type="text" @bind="bookList.Name" />
+            <button class="create-list-button" @onclick="OnSubmit">Submit</button>
         </div>
         <div class="col p5">
             <select @bind="bookList.ListType">
@@ -18,7 +23,6 @@
         </div>
     </div>
     <br/>
-    <button @onclick="OnSubmit">Submit</button>
 </AntDesign.Spin>
 
 @code {
