@@ -4,32 +4,44 @@
 @using Bookanizer.Shared.DTO
 @using Bookanizer.Shared.Libraries
 @using Bookanizer.Client.Components
-<button style="position:absolute; height:30px;width:50px;top:0;left:0;" @onclick="ShowMenu">menu</button>
-<div style="position:absolute; top:30px;left:0;width:200px;border:solid 2px black; padding:10px" hidden="@showMenu">
-    <a href="index">Index seite (razor beispiele)</a>
-    <a href="apiexamples">Api-Examples</a>
-    <hr/>
-    <a href="create">Create book</a>
-    <hr/>
+
+<div class="nav-bar-menu">
     @if (loggedInUser.Id != Guid.Empty)
     {
         <p>Logged in as: @loggedInUser.UserName</p>
-        <a @onclick="LogOut">Logout</a>
+        <div class="pseudo-button"><a @onclick="LogOut">Logout</a></div>
     }
     else
     {
-        <a href="login">Login</a>
-        <a href="register">Register</a>
+        <div class="pseudo-button"><a href="login" style="text-decoration: none; color: black">Login</a></div>
+        <div class="pseudo-button"><a href="register" style="text-decoration: none; color: black">Register</a></div>
     }
+    <button @onclick="ShowMenu">...</button>
+    <div class="menu" style="position:absolute; top:40px;right:0;width:200px;border:solid 2px black; padding:10px" hidden="@showMenu">
+        <a href="index">Index seite (razor beispiele)</a>
+        <a href="apiexamples">Api-Examples</a>
+        <hr/>
+        <a href="create">Create book</a>
+	</div>
 </div>
 <div class="text-center">
     <div class="homepage-icon">
-        <p>Your Logo could be here</p>
     </div>
     <div class="">
-        <input style="width:200px" placeholder="Search for books..." @bind-value="searchText"/>
+        <input class="search-input" style="width:200px" placeholder=" Search..." @bind-value="searchText"/>
         <button @onclick="StartSearch">Search</button>
     </div>
+</div>
+<div class="page-description">
+    <p>
+        Welcome to Bookanizer!
+    </p>
+    <br/>
+    <p>
+        Organize your library, create and share lists, rate and review books and track your reads.
+        Wether it's current reads, finished books, five-star favorites, to-be-read, books you stopped reading or your wish list
+        - everything is just a click away. Discover new ways to enjoy reading.'
+    </p>
 </div>
 
 @if (loggedInUser.Id != Guid.Empty)

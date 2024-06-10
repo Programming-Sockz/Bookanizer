@@ -9,22 +9,26 @@
         <br />
         <h3 class="text-center">Login</h3>
         <br />
-        <div class="form-floating">
+        <div class="login-form">
+
+            <label class="login-label">E-Mail:</label>
             <input type="email" class="form-control Login-input" id="floatingInput" @bind-value="login.Email" placeholder="name@example.com">
-            <label for="floatingInput">Email address</label>
-        </div>
-        <ValidationMessage For="()=>login.Email"></ValidationMessage>
-        <br />
-        <div class="form-floating">
+
+            <div class="error-text-login">
+			    <ValidationMessage For="()=>login.Email"></ValidationMessage>
+		    </div>
+            <br />
+            <label class="login-label">Password:</label>
             <input type="password" class="form-control Login-input" id="floatingPassword" @bind-value="login.Password" placeholder="Password">
-            <label for="floatingPassword">Password</label>
+            <div class="error-text-login">
+                <ValidationMessage For="()=>login.Password"></ValidationMessage>
+            </div>
+            <br />
+            @if (responseDTO != null && !responseDTO.Success)
+            {
+                <p class="validation-message">@responseDTO.ErrorMessage</p>
+            }
         </div>
-        <ValidationMessage For="()=>login.Password"></ValidationMessage>
-        <br />
-        @if (responseDTO != null && !responseDTO.Success)
-        {
-            <p class="validation-message">@responseDTO.ErrorMessage</p>
-        }
-        <button type="submit" disabled="@isSubmitting">Login</button>
+        <button type="submit" disabled="@isSubmitting" style="width: 120px">Login</button>
     </EditForm>
 </div>
