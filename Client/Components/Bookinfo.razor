@@ -1,19 +1,17 @@
 ﻿@using Bookanizer.Shared.DTO
 
 <div class="book-display">
-    <div class="col-2">
+    <div>
         @if (Book.ImageLink == null)
         {
-            <div class="no-cover">
-                <p>No cover Image available</p>
-            </div>
+            <img src="/images/NoCover.png" class="book-cover"/>
         }
         else
         {
             <img src="@Book.ImageLink" class="book-cover"/>
         }
     </div>
-    <div class="col me-0 pe-5">
+    <div>
         <h2 class="book-title"><b>@Book.Title</b></h2>
         @if (ChildContent != null)
         {
@@ -46,7 +44,7 @@
             </div>
         }
         <div class="book-description">
-            @Book.Description
+            @((MarkupString)Book.Description)
         </div>
     </div>
 </div>

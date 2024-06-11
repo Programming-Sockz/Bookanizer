@@ -119,7 +119,7 @@ button{
 
 .book-display {
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: 200px auto;
     margin-left: 10%;
     margin-right: 10%;
     grid-gap: 20px;
@@ -133,8 +133,7 @@ button{
     margin-top: 0;
 }
 .book-cover, .no-cover {
-    max-width: 100%!important;
-    max-height: 300px;
+    width: 200px!important;
 }
 
 .no-cover {

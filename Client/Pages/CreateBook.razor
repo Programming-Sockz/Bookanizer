@@ -52,19 +52,31 @@
                     </div>
                 }
                 <h2>Tags:</h2>
-                <Select Mode="tags"
-                        Placeholder="Please select"
-                        DataSource="tags.OrderBy(x=>x.Name)"
-                        @bind-Values="@selectedTags"
-                        TItemValue="Guid"
-                        TItem="TagDTO"
-                        LabelName="@nameof(TagDTO.Name)"
-                        ValueName="@nameof(TagDTO.Id)"
-                        Style="width: 50%; margin-left: 10px"
-                        EnableSearch
-                        SearchDebounceMilliseconds="500"
-                        EnableVirtualization>
-                </Select>
+                <div class="row">
+                    <div class="col">
+                        <AntDesign.Select DataSource="@tagSearchResult"
+                                          EnableSearch="true"
+                                          ValueName="@nameof(TagDTO.Id)"
+                                          LabelName="@nameof(TagDTO.Name)"
+                                          TItemValue="Guid"
+                                          TItem="TagDTO"
+                                          Placeholder="Tag"
+                                          ShowArrowIcon="false"
+                                          SearchDebounceMilliseconds="300"
+                                          ShowSearchIcon="true"
+                                          Class="author-search-select"
+                                          OnSearch="(async value => await OnTagSearch(value))"
+                                          OnSelectedItemChanged="s=>OnTagSelected(s)">
+                        </AntDesign.Select>
+                    </div>
+                    <div class="col">
+                        @foreach (var tag in selectedTags)
+                        {
+                            <span class="badge badge-pill" style="background: lightgray; margin-right: 5px; color: black">@tag.Name <Icon Type="close-circle" Theme="outline" @onclick="()=>RemoveTag(tag.Id)"/></span>
+                        }
+                    </div>
+                </div>
+                
             </div>
             <br/>
             <button type="submit">Submit</button>
@@ -81,10 +93,11 @@
     private List<GenreDTO> genres = new();
     private List<Guid> selectedGenres = new();
     private List<TagDTO> tags = new();
-    private IEnumerable<Guid> selectedTags;
+    private List<TagDTO> selectedTags = new();
     private bool isLoading = true;
     private bool isSubmitting = false;
     private List<AuthorDTO> authorSearchResult = new();
+    private List<TagDTO> tagSearchResult = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -118,7 +131,7 @@
         }
 
         await Http.PostAsJsonAsync(ApiRoutes.Genres.POST_UpdateGenres(), new UpdateGenreDTO(){ BookId = bookIdResult, GenreIds = selectedGenres});
-        await Http.PostAsJsonAsync(ApiRoutes.Tags.POST_UpdateTags(), new UpdateTagDTO(){ BookId = bookIdResult, TagIds = selectedTags.ToList()});
+        await Http.PostAsJsonAsync(ApiRoutes.Tags.POST_UpdateTags(), new UpdateTagDTO(){ BookId = bookIdResult, TagIds = selectedTags.Select(x=>x.Id).ToList()});
         NavigationManager.NavigateTo("");
     }
 
@@ -141,18 +154,18 @@
         return selectedGenres.Any(x => x == genre);
     }
     
-    Task<List<AuthorDTO>> _oldTask;
+    Task<List<AuthorDTO>> _oldAuthorTask;
 
     private async Task OnAuthorSearch(string searchText)
     {
         if (!string.IsNullOrWhiteSpace(searchText) && searchText.Length > 1)
         {
-            if (_oldTask == null || _oldTask.IsCompleted)
+            if (_oldAuthorTask == null || _oldAuthorTask.IsCompleted)
             {
 
-                _oldTask = Http.GetFromJsonAsync<List<AuthorDTO>>(ApiRoutes.Author.GET_ByName(searchText));
+                _oldAuthorTask = Http.GetFromJsonAsync<List<AuthorDTO>>(ApiRoutes.Author.GET_ByName(searchText));
 
-                var content = await _oldTask;
+                var content = await _oldAuthorTask;
 
                 if (content != null)
                 {
@@ -175,8 +188,59 @@
         }
     }
     
-    private async Task OnAuthorSelected(AuthorDTO match)
+    private void OnAuthorSelected(AuthorDTO match)
     {
         book.AuthorId = match.Id;
     }
+    
+    Task<List<TagDTO>> _oldTagTask;
+
+    private async Task OnTagSearch(string searchText)
+    {
+        if (!string.IsNullOrWhiteSpace(searchText) && searchText.Length > 1)
+        {
+            if (_oldTagTask == null || _oldTagTask.IsCompleted)
+            {
+
+                _oldTagTask = Http.GetFromJsonAsync<List<TagDTO>>(ApiRoutes.Tags.GET_ByName(searchText));
+
+                var content = await _oldTagTask;
+
+                if (content != null)
+                {
+                    tagSearchResult.Clear();
+                    StateHasChanged();
+                    tagSearchResult = content;
+                    StateHasChanged();
+                }
+                else
+                {
+                    tagSearchResult.Clear();
+                    StateHasChanged();
+                }
+            }
+        }
+        else if (string.IsNullOrWhiteSpace(searchText))
+        {
+            if (tagSearchResult.Any())
+                tagSearchResult.Clear();
+        }
+    }
+    
+    private void OnTagSelected(TagDTO match)
+    {
+        if (!selectedTags.Any(x => x.Id == match.Id))
+        {
+            selectedTags.Add(match);
+        }
+        tagSearchResult.Clear();
+        StateHasChanged();
+    }
+
+    private void RemoveTag(Guid tagId)
+    {
+        selectedTags.Remove(selectedTags.First(x => x.Id == tagId));
+        StateHasChanged();
+    }
+
 }
