@@ -46,12 +46,12 @@
 
 @if (loggedInUser.Id != Guid.Empty)
 {
-    <h2>Your Book Lists</h2>
+    <h2 style="margin-left: 10%">Your Book Lists</h2>
     @if (userBookLists.Any())
     {
         @foreach (var bookList in userBookLists)
         {
-            <h3>@bookList.Name</h3>
+            <h3 style="margin-left: 10%">@bookList.Name</h3>
             @if (bookList.Books.Any())
             {
                 @foreach (var book in bookList.Books)

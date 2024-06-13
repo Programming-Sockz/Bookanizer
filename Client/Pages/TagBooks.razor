@@ -1,4 +1,6 @@
 ﻿@page "/tag/{id:guid}"
+@using AntDesign
+@using Blazored.LocalStorage
 @using Bookanizer.Shared.DTO
 @using Bookanizer.Shared.Libraries
 @using Bookanizer.Client.Components
@@ -7,18 +9,69 @@
 
 @foreach (var book in books)
 {
-    <Bookinfo Book="book"></Bookinfo>
+    <Bookinfo Book="book">
+        <Dropdown Trigger="@(new Trigger[] { Trigger.Click })">
+            <Overlay>
+                <Menu>
+                    @foreach (var bookList in userBookLists)
+                    {
+                    <MenuItem>
+                        <a rel="noopener noreferrer" @onclick="()=>AddBookToList(book.Id, bookList.Id)">
+                            @bookList.Name
+                        </a>
+                    </MenuItem>
+                    }
+                    <MenuItem>
+                        <a rel="noopener noreferrer" target="_blank" href="createbookList">
+                            Create booklist
+                        </a>
+                    </MenuItem>
+                </Menu>
+            </Overlay>
+            <ChildContent>
+                <a class="ant-dropdown-link" @onclick:preventDefault>
+                    <Icon Type="plus-square" Theme="outline" />
+                </a>
+            </ChildContent>
+        </Dropdown>
+    </Bookinfo>
 }
 @code {
     [Parameter] public Guid Id { get; set; }
     [Inject] public HttpClient Http { get; set; }
+    [Inject] public ILocalStorageService LocalStorageService { get; set; }
+    [Inject] public IMessageService  _notice { get; set; }
     public TagDTO tag = new();
     public List<BookDTO> books = new();
+    private static string loginStorageKey = "loginStamp";
 
+    private bool isLoggedIn = false;
+
+    private List<BookListDTO> userBookLists = new();
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var loggedInUser = await LocalStorageService.GetItemAsync<LoginResponseDTO>(loginStorageKey);
+        if (loggedInUser != null && loggedInUser.LoginStamp != Guid.Empty)
+        {
+            userBookLists = await Http.GetFromJsonAsync<List<BookListDTO>>(ApiRoutes.BookList.GET_ByUserIdBrief(loggedInUser.UserId.Value));
+            isLoggedIn = true;
+        }
+    }
+    
     protected override async Task OnParametersSetAsync()
     {
         tag = await Http.GetFromJsonAsync<TagDTO>(ApiRoutes.Tags.GET_ById(Id));
 
         books = await Http.GetFromJsonAsync<List<BookDTO>>(ApiRoutes.Tags.GET_BooksById(tag.Id));
+    }
+
+    private async Task AddBookToList(Guid bookId, Guid bookListId)
+    {
+        var result = await Http.PostAsJsonAsync(ApiRoutes.BookList.POST_AddBook(), new BookBookListDTO() { BookId = bookId, BookListId = bookListId });
+        if (result.IsSuccessStatusCode)
+        {
+            await _notice.Info(await result.Content.ReadAsStringAsync());
+        }
     }
 }

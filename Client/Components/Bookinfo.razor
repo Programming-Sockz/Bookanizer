@@ -29,7 +29,7 @@
                 <span><b>Genre: </b></span>
                 @foreach (var genre in Book.Genres)
                 {
-                    <span @onclick="() => GoToGenre(genre.Id)" class="genre-pill">@genre.Name</span>
+                    <span @onclick="() => GoToGenre(genre.Id)" class="badge badge-pill genre-pill">@genre.Name</span>
                 }
             </div>
         }
@@ -39,7 +39,7 @@
                 <span><b>Tags: </b></span>
                 @foreach (var tag in Book.Tags)
                 {
-                    <span @onclick="() => GoToTag(tag.Id)" class="tag-pill">@tag.Name</span>
+                    <span @onclick="() => GoToTag(tag.Id)" class="badge badge-pill tag-pill">@tag.Name</span>
                 }
             </div>
         }

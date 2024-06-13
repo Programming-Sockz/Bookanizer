@@ -161,6 +161,8 @@ button{
     border-radius: 4px;
     margin-right: 5px;
     cursor: pointer;
+    padding:0 4px;
+    color:black!important;
 }
     .genre-pill:hover {
         background-color:deepskyblue;
@@ -168,8 +170,6 @@ button{
     }
 .tag-container {
     width: 100% !important;
-    overflow: hidden !important;
-    display: flex;
     gap: 5px;
     margin-bottom: 10px;
 }
@@ -179,11 +179,13 @@ button{
     border-radius: 4px;
     margin-right: 5px;
     cursor: pointer;
+    padding:0 4px;
+    color:black!important;
 }
     .tag-pill:hover {
         background-color: lightslategray;
         transition:250ms;
-        color:white;
+        color:white!important;
     }
     
 main {
