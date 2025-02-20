@@ -9,7 +9,7 @@
     @if (loggedInUser.Id != Guid.Empty)
     {
         <p>Logged in as: @loggedInUser.UserName</p>
-        <div class="pseudo-button"><a @onclick="LogOut">Logout</a></div>
+        <div class="pseudo-button" @onclick="LogOut"><a >Logout</a></div>
     }
     else
     {

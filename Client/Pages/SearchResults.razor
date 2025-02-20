@@ -6,6 +6,7 @@
 @using Blazored.LocalStorage
 <div class="search-results">
     <h2>Search Results for: @searchText</h2>
+    <button @onclick="() => Test()"></button>
 </div>
 @if (books != null && books.Any())
 {
@@ -75,6 +76,7 @@ else
         books = await Http.GetFromJsonAsync<List<BookDTO>>(ApiRoutes.Books.GET_ByName(searchText));
     }
 
+    
     private async Task AddBookToList(Guid bookId, Guid bookListId)
     {
         var result = await Http.PostAsJsonAsync(ApiRoutes.BookList.POST_AddBook(), new BookBookListDTO() { BookId = bookId, BookListId = bookListId });
@@ -82,5 +84,10 @@ else
         {
             await _notice.Info(await result.Content.ReadAsStringAsync());
         }
+    }
+
+    private void Test()
+    {
+        
     }
 }
